@@ -32,7 +32,6 @@
         .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Mobile Specific Tweaks */
         @media (max-width: 640px) {
             .main-card {
                 height: 100%;
@@ -123,7 +122,7 @@
                 responses: [
                     "Hsiang brings a <strong>rare fusion</strong> of senior engineering expertise and a Master's in Accounting. She doesn't just write code; she builds robust financial solutions. 🐾",
                     "She's the bridge between tech and business! With 9+ years in Fintech, she ensures code aligns perfectly with financial accuracy. 💎",
-                    "She has the technical seniority to lead teams and the financial literacy to understand complex business logic. 🚀"
+                    "She has the technical seniority to understand complex business logic and provide high-quality delivery for financial platforms. 🚀"
                 ] 
             },
             { 
@@ -142,6 +141,15 @@
                     "While her core mastery is in the backend (.NET/SQL), she is highly comfortable working with React to build integrated full-stack features. 🐾",
                     "She uses React as a powerful tool in her kit to complement her deep backend expertise, ensuring a smooth end-to-end user experience. 💎",
                     "She has professional experience in React development, primarily focused on building functional, data-driven interfaces for financial platforms. 🚀"
+                ] 
+            },
+            { 
+                id: 'fnz', 
+                keywords: ['fnz', 'experience', 'work', 'current', 'job', 'history', 'career'], 
+                responses: [
+                    "Currently a Senior Analyst Developer at FNZ Auckland, where she contributes to financial platforms and supports team technical quality. 🐾",
+                    "At FNZ, she has optimized CI/CD workflows and ensured platform integrity for global financial clients. 📈",
+                    "Her career at FNZ highlights her journey from an Analyst Developer to a Senior developer handling complex migrations and technical challenges. 🏆"
                 ] 
             },
             { 
@@ -213,7 +221,7 @@
             messageDiv.className = `flex ${isUser ? 'justify-end' : 'items-start'} space-x-3 animate-fade-in`;
             
             const content = isUser ? `
-                <div class="bg-[#004a99] text-white p-4 rounded-2xl rounded-tr-none shadow-sm max-w-[85%] text-sm">
+                <div class="bg-[#004a99] text-white p-4 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm">
                     ${text}
                 </div>
             ` : `
@@ -250,7 +258,6 @@
         
         window.onload = () => {
             document.getElementById('user-input-field').focus();
-            // Prevent zooming on input focus in iOS
             document.addEventListener('gesturestart', function (e) {
                 e.preventDefault();
             });
