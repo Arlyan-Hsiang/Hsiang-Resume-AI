@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hsiang Tzu Tseng - AI Resume Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .chat-container { height: 60vh; overflow-y: auto; scrollbar-width: thin; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .cat-avatar { width: 44px; height: 44px; background-color: #004a99; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .cat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden glass-effect border border-slate-200">
+        
+        <div class="bg-[#004a99] p-6 text-white flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="text-3xl">🐱💎</div>
+                <div>
+                    <h1 class="text-xl font-bold">Hsiang Tzu Tseng (Ruby)</h1>
+                    <p class="text-sm opacity-80">AI Resume Assistant</p>
+                </div>
+            </div>
+            <div class="text-xs bg-white/20 px-3 py-1 rounded-full">Online</div>
+        </div>
+
+        <div id="chat-window" class="chat-container p-6 space-y-4 bg-slate-50/50">
+            <div class="flex items-start space-x-3">
+                <div class="cat-avatar">
+                    <img src="https://raw.githubusercontent.com/openclaw/openclaw/main/assets/ruby_cat_avatar.png" alt="Ruby" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHRleHQgeT0iMjAiIGZvbnQtc2l6ZT0iMjAiPvCfk🐱PC90ZXh0Pjwvc3ZnPg=='">
+                </div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
+                    Hi there! I'm Ruby, Hsiang Tzu's digital cat assistant. 🐱✨<br><br>
+                    I can tell you all about her <strong>senior engineering skills, financial expertise, and career highlights</strong>.<br><br>
+                    Try asking:<br>
+                    - "Why is she a great fit for our company?"<br>
+                    - "Tell me about her tech stack."<br>
+                    - "Hey Ruby, how is your day going?"
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 bg-white border-t border-slate-100">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="user-input-field" placeholder="Type a question..." class="flex-1 bg-slate-100 border-none rounded-full px-5 py-3 text-sm focus:ring-2 focus:ring-[#004a99] transition-all outline-none">
+                <button onclick="handleSend()" class="bg-[#004a99] text-white p-3 rounded-full hover:bg-[#003366] transition-colors shadow-lg">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="flex justify-between items-center mt-3">
+                <p class="text-[10px] text-slate-400 uppercase tracking-widest">Powered by Dynamic Cat Logic 🐱💎</p>
+                <button onclick="clearMemory()" class="text-[10px] text-slate-400 hover:text-red-400 transition-colors">Reset Experience</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const profile = {
+            name: "Hsiang Tzu Tseng",
+            role: "Senior Software Developer / Senior Analyst Developer",
+            skills: "Expert in C#/.NET Core, ReactJS, JavaScript, MS SQL Server, REST APIs, CI/CD, and TDD (xUnit).",
+            education: "Master of Management (Accounting) from UoA; Bachelor of Information Management from NCNU.",
+            avatar: "https://raw.githubusercontent.com/openclaw/openclaw/main/assets/ruby_cat_avatar.png"
+        };
+
+        const qaBase = [
+            { 
+                id: 'value', 
+                keywords: ['value', 'fit', 'why', 'hire', 'advantage', 'need', 'suit', 'company', 'worth'], 
+                responses: [
+                    "Hsiang brings a <strong>rare fusion</strong> of senior engineering expertise and a Master's in Accounting. She doesn't just write code; she builds robust financial solutions. 🐾",
+                    "She's the bridge between tech and business! With 9+ years in Fintech, she ensures code aligns perfectly with financial accuracy. 💎",
+                    "She has the technical seniority to lead teams and the financial literacy to understand complex business logic. 🚀"
+                ] 
+            },
+            { 
+                id: 'tech', 
+                keywords: ['tech', 'skill', 'language', 'stack', 'ability', 'technology', 'code', 'coding'], 
+                responses: [
+                    `Her tech stack is primarily <strong>${profile.skills}</strong>. She builds scalable backend services and modern frontends. 🐾`,
+                    "She is a full-stack expert in the .NET ecosystem and React, with extensive experience in TDD and CI/CD. 💻",
+                    "High-performance SQL, C# backends, and React frontends — she delivers clean, architectural excellence. 🛠️"
+                ] 
+            },
+            { 
+                id: 'fnz', 
+                keywords: ['fnz', 'experience', 'work', 'current', 'job', 'history', 'career'], 
+                responses: [
+                    "Currently a Senior Analyst Developer at FNZ Auckland, leading technical initiatives and mentoring devs. 🐾",
+                    "At FNZ, she has optimized CI/CD workflows and ensured platform integrity for global financial clients. 📈",
+                    "Her career at FNZ highlights her journey from an Analyst Developer to a Senior lead handling complex migrations. 🏆"
+                ] 
+            },
+            { 
+                id: 'greet', 
+                keywords: ['hi', 'hello', 'hey', 'greetings', 'ruby', 'yo'], 
+                responses: [
+                    "Meow! Hello there! I'm Ruby. Ready to tell you everything about Hsiang's career! 🐾✨",
+                    "Hi! Yes, I'm Ruby! How can I help you explore Hsiang's background today? 🐱💎",
+                    "Greetings! Ruby here. Looking for a top-tier Senior Developer? You've come to the right place! 😊"
+                ] 
+            },
+            { 
+                id: 'status', 
+                keywords: ['how are you', 'how is it going', 'how are things', 'how is your day', 'doing'], 
+                responses: [
+                    "I'm purring with excitement today! Just keeping an eye on Hsiang's impressive resume. How about you? 😊",
+                    "Doing great! I love talking about Hsiang's technical achievements. It's a busy day for a digital cat! 🐾",
+                    "Everything is purr-fect! Just waiting for a recruiter like you to ask something interesting. 🐱✨"
+                ] 
+            }
+        ];
+
+        let learnedMemory = JSON.parse(localStorage.getItem('ruby_learned_memory') || '[]');
+
+        function saveToMemory(input, response) {
+            learnedMemory.push({ input: input.toLowerCase(), response: response });
+            localStorage.setItem('ruby_learned_memory', JSON.stringify(learnedMemory));
+        }
+
+        function clearMemory() {
+            localStorage.removeItem('ruby_learned_memory');
+            learnedMemory = [];
+            addMessage("My chat memory has been reset! 🧹🐾");
+        }
+
+        function getAIResponse(input) {
+            const lowerInput = input.toLowerCase();
+            
+            // Check learned memory first
+            const learned = learnedMemory.find(m => lowerInput.includes(m.input));
+            if (learned) return learned.response;
+
+            // Check greetings and status first (higher priority for natural flow)
+            const greeting = qaBase.find(qa => qa.id === 'greet' && qa.keywords.some(k => lowerInput.includes(k)));
+            if (greeting) return greeting.responses[Math.floor(Math.random() * greeting.responses.length)];
+
+            const status = qaBase.find(qa => qa.id === 'status' && qa.keywords.some(k => lowerInput.includes(k)));
+            if (status) return status.responses[Math.floor(Math.random() * status.responses.length)];
+
+            // Match other categories
+            for (let qa of qaBase) {
+                if (qa.keywords.some(k => lowerInput.includes(k))) {
+                    return qa.responses[Math.floor(Math.random() * qa.responses.length)];
+                }
+            }
+
+            // Fallback for "What's her X"
+            if (lowerInput.includes("what is her") || lowerInput.includes("what's her")) {
+                const topic = lowerInput.split("her ").pop().replace("?", "").trim();
+                const autoResponse = `Hsiang's ${topic} is driven by her 9+ years of engineering excellence and professional dedication. 🐾`;
+                saveToMemory(lowerInput, autoResponse);
+                return autoResponse + " (Added to my memory! ✨)";
+            }
+
+            return "Meow~ I'm not quite sure about that specific topic yet, but I'm learning! Feel free to ask about her 'value', 'tech skills', or 'experience'. 🐾";
+        }
+
+        function addMessage(text, isUser = false) {
+            const chatWindow = document.getElementById('chat-window');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'items-start'} space-x-3 animate-fade-in`;
+            
+            const content = isUser ? `
+                <div class="bg-[#004a99] text-white p-4 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm">
+                    ${text}
+                </div>
+            ` : `
+                <div class="cat-avatar">
+                    <img src="${profile.avatar}" alt="Ruby" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHRleHQgeT0iMjAiIGZvbnQtc2l6ZT0iMjAiPvCfk🐱PC90ZXh0Pjwvc3ZnPg=='">
+                </div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
+                    ${text}
+                </div>
+            `;
+            
+            messageDiv.innerHTML = content;
+            chatWindow.appendChild(messageDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function handleSend() {
+            const inputEl = document.getElementById('user-input-field');
+            const query = inputEl.value.trim();
+            if (!query) return;
+
+            addMessage(query, true);
+            inputEl.value = '';
+
+            setTimeout(() => {
+                const response = getAIResponse(query);
+                addMessage(response);
+            }, 600);
+        }
+
+        document.getElementById('user-input-field').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+        
+        // Auto-focus the input
+        window.onload = () => document.getElementById('user-input-field').focus();
+    </script>
+</body>
+</html>
