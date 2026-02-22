@@ -43,7 +43,7 @@
                     Try asking:<br>
                     - "Why is she a great fit for our company?"<br>
                     - "Tell me about her tech stack."<br>
-                    - "Hey Ruby, how is your day going?"
+                    - "Hey Ruby, how is the weather today?"
                 </div>
             </div>
         </div>
@@ -72,6 +72,15 @@
         };
 
         const qaBase = [
+            { 
+                id: 'weather', 
+                keywords: ['weather', 'sunny', 'rain', 'climate', 'forecast', '天氣', '下雨'], 
+                responses: [
+                    "Auckland's weather is always an adventure! 🌦️ But inside this code, it's always bright and productive. 🐾",
+                    "Classic Auckland: four seasons in one day! 🌈 Luckily, Hsiang's coding skills are much more predictable and reliable than the weather. 💎",
+                    "Whether it's raining or sunny outside, it's always the perfect climate for a career conversation! 🐾✨"
+                ] 
+            },
             { 
                 id: 'value', 
                 keywords: ['value', 'fit', 'why', 'hire', 'advantage', 'need', 'suit', 'company', 'worth'], 
@@ -135,25 +144,27 @@
         function getAIResponse(input) {
             const lowerInput = input.toLowerCase();
             
-            // Check learned memory first
             const learned = learnedMemory.find(m => lowerInput.includes(m.input));
             if (learned) return learned.response;
 
-            // Check greetings and status first (higher priority for natural flow)
+            // Priority 1: Weather
+            const weather = qaBase.find(qa => qa.id === 'weather' && qa.keywords.some(k => lowerInput.includes(k)));
+            if (weather) return weather.responses[Math.floor(Math.random() * weather.responses.length)];
+
+            // Priority 2: Greetings & Status
             const greeting = qaBase.find(qa => qa.id === 'greet' && qa.keywords.some(k => lowerInput.includes(k)));
             if (greeting) return greeting.responses[Math.floor(Math.random() * greeting.responses.length)];
 
             const status = qaBase.find(qa => qa.id === 'status' && qa.keywords.some(k => lowerInput.includes(k)));
             if (status) return status.responses[Math.floor(Math.random() * status.responses.length)];
 
-            // Match other categories
+            // Priority 3: Other Professional categories
             for (let qa of qaBase) {
                 if (qa.keywords.some(k => lowerInput.includes(k))) {
                     return qa.responses[Math.floor(Math.random() * qa.responses.length)];
                 }
             }
 
-            // Fallback for "What's her X"
             if (lowerInput.includes("what is her") || lowerInput.includes("what's her")) {
                 const topic = lowerInput.split("her ").pop().replace("?", "").trim();
                 const autoResponse = `Hsiang's ${topic} is driven by her 9+ years of engineering excellence and professional dedication. 🐾`;
@@ -205,7 +216,6 @@
             if (e.key === 'Enter') handleSend();
         });
         
-        // Auto-focus the input
         window.onload = () => document.getElementById('user-input-field').focus();
     </script>
 </body>
