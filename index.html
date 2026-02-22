@@ -71,7 +71,7 @@
                 <div class="cat-avatar">
                     <img src="https://raw.githubusercontent.com/openclaw/openclaw/main/assets/ruby_cat_avatar.png" alt="Ruby" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHRleHQgeT0iMjAiIGZvbnQtc2l6ZT0iMjAiPvCfk🐱PC90ZXh0Pjwvc3ZnPg=='">
                 </div>
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
+                <div id="welcome-msg" class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
                     Hi there! I'm Ruby, Hsiang Tzu's digital cat assistant. 🐱✨<br><br>
                     I can tell you all about her <strong>senior backend expertise, financial logic, and career highlights</strong>.<br><br>
                     Try asking:<br>
@@ -173,6 +173,7 @@
         ];
 
         let learnedMemory = JSON.parse(localStorage.getItem('ruby_learned_memory') || '[]');
+        let recruiterName = localStorage.getItem('recruiter_name') || null;
 
         function saveToMemory(input, response) {
             learnedMemory.push({ input: input.toLowerCase(), response: response });
@@ -181,12 +182,45 @@
 
         function clearMemory() {
             localStorage.removeItem('ruby_learned_memory');
+            localStorage.removeItem('recruiter_name');
             learnedMemory = [];
+            recruiterName = null;
             addMessage("My chat memory has been reset! 🧹🐾");
         }
 
         function getAIResponse(input) {
             const lowerInput = input.toLowerCase();
+            
+            // 1. Check for name introduction
+            const namePatterns = [
+                /my name is ([a-zA-Z\s]+)/i,
+                /i am ([a-zA-Z\s]+)/i,
+                /call me ([a-zA-Z\s]+)/i,
+                /this is ([a-zA-Z\s]+)/i
+            ];
+
+            for (let pattern of namePatterns) {
+                const match = input.match(pattern);
+                if (match && match[1]) {
+                    const potentialName = match[1].trim();
+                    if (potentialName.length > 1 && potentialName.length < 30) {
+                        recruiterName = potentialName;
+                        localStorage.setItem('recruiter_name', recruiterName);
+                        return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 I've noted your name. Now, how can I help you discover Hsiang's amazing professional journey? ✨`;
+                    }
+                }
+            }
+
+            // 2. Check for "What is my name"
+            if (lowerInput.includes("my name") && (lowerInput.includes("what") || lowerInput.includes("know"))) {
+                if (recruiterName) {
+                    return `Your name is <strong>${recruiterName}</strong>! I never forget a recruiter who takes an interest in Hsiang. 😉🐾`;
+                } else {
+                    return "I don't know your name yet! But I'd love to learn it. You can say 'My name is...' and I'll remember it! 🐱💎";
+                }
+            }
+
+            // 3. Normal response logic
             const learned = learnedMemory.find(m => lowerInput.includes(m.input));
             if (learned) return learned.response;
 
@@ -194,14 +228,20 @@
             if (weather) return weather.responses[Math.floor(Math.random() * weather.responses.length)];
 
             const greeting = qaBase.find(qa => qa.id === 'greet' && qa.keywords.some(k => lowerInput.includes(k)));
-            if (greeting) return greeting.responses[Math.floor(Math.random() * greeting.responses.length)];
+            if (greeting) {
+                let resp = greeting.responses[Math.floor(Math.random() * greeting.responses.length)];
+                if (recruiterName) resp = resp.replace("there", recruiterName).replace("meet you", `meet you again, ${recruiterName}`);
+                return resp;
+            }
 
             const status = qaBase.find(qa => qa.id === 'status' && qa.keywords.some(k => lowerInput.includes(k)));
             if (status) return status.responses[Math.floor(Math.random() * status.responses.length)];
 
             for (let qa of qaBase) {
                 if (qa.keywords.some(k => lowerInput.includes(k))) {
-                    return qa.responses[Math.floor(Math.random() * qa.responses.length)];
+                    let resp = qa.responses[Math.floor(Math.random() * qa.responses.length)];
+                    if (recruiterName && Math.random() > 0.5) resp = `Well, ${recruiterName}, ` + resp;
+                    return resp;
                 }
             }
 
@@ -212,7 +252,9 @@
                 return autoResponse + " (Added to my memory! ✨)";
             }
 
-            return "Meow~ I'm not quite sure about that specific topic yet, but I'm learning! Feel free to ask about her 'value', 'tech skills', or 'experience'. 🐾";
+            return recruiterName 
+                ? `Meow~ ${recruiterName}, I'm not quite sure about that specific topic yet, but I'm learning! Feel free to ask about her 'value' or 'tech stack'. 🐾`
+                : "Meow~ I'm not quite sure about that specific topic yet, but I'm learning! Feel free to ask about her 'value' or 'tech stack'. 🐾";
         }
 
         function addMessage(text, isUser = false) {
@@ -257,6 +299,9 @@
         });
         
         window.onload = () => {
+            if (recruiterName) {
+                document.getElementById('welcome-msg').innerHTML = `Welcome back, <strong>${recruiterName}</strong>! 🐾✨<br><br>I still remember everything about Hsiang's <strong>senior backend expertise</strong>. How can I help you today?`;
+            }
             document.getElementById('user-input-field').focus();
             document.addEventListener('gesturestart', function (e) {
                 e.preventDefault();
