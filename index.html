@@ -39,11 +39,11 @@
                 </div>
                 <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
                     Hi there! I'm Ruby, Hsiang Tzu's digital cat assistant. 🐱✨<br><br>
-                    I can tell you all about her <strong>senior engineering skills, financial expertise, and career highlights</strong>.<br><br>
+                    I can tell you all about her <strong>senior backend expertise, financial logic, and career highlights</strong>.<br><br>
                     Try asking:<br>
                     - "Why is she a great fit for our company?"<br>
-                    - "Tell me about her tech stack."<br>
-                    - "Hey Ruby, how is the weather today?"
+                    - "What is her primary tech stack?"<br>
+                    - "How is the weather today?"
                 </div>
             </div>
         </div>
@@ -66,7 +66,8 @@
         const profile = {
             name: "Hsiang Tzu Tseng",
             role: "Senior Software Developer / Senior Analyst Developer",
-            skills: "Expert in C#/.NET Core, ReactJS, JavaScript, MS SQL Server, REST APIs, CI/CD, and TDD (xUnit).",
+            primarySkills: "Expert in C#/.NET Core, MS SQL Server, REST APIs, and System Architecture.",
+            supportingSkills: "Experienced in modern web technologies including React and JavaScript.",
             education: "Master of Management (Accounting) from UoA; Bachelor of Information Management from NCNU.",
             avatar: "https://raw.githubusercontent.com/openclaw/openclaw/main/assets/ruby_cat_avatar.png"
         };
@@ -85,7 +86,7 @@
                 id: 'value', 
                 keywords: ['value', 'fit', 'why', 'hire', 'advantage', 'need', 'suit', 'company', 'worth'], 
                 responses: [
-                    "Hsiang brings a <strong>rare fusion</strong> of senior engineering expertise and a Master's in Accounting. She doesn't just write code; she builds robust financial solutions. 🐾",
+                    "Hsiang brings a <strong>rare fusion</strong> of senior backend expertise and a Master's in Accounting. She doesn't just write code; she builds robust financial solutions. 🐾",
                     "She's the bridge between tech and business! With 9+ years in Fintech, she ensures code aligns perfectly with financial accuracy. 💎",
                     "She has the technical seniority to lead teams and the financial literacy to understand complex business logic. 🚀"
                 ] 
@@ -94,9 +95,18 @@
                 id: 'tech', 
                 keywords: ['tech', 'skill', 'language', 'stack', 'ability', 'technology', 'code', 'coding'], 
                 responses: [
-                    `Her tech stack is primarily <strong>${profile.skills}</strong>. She builds scalable backend services and modern frontends. 🐾`,
-                    "She is a full-stack expert in the .NET ecosystem and React, with extensive experience in TDD and CI/CD. 💻",
-                    "High-performance SQL, C# backends, and React frontends — she delivers clean, architectural excellence. 🛠️"
+                    `Her core expertise is in <strong>${profile.primarySkills}</strong>. She specializes in building robust backend services for complex financial systems. 🐾`,
+                    "She is a senior backend-focused developer with strong skills in the .NET ecosystem, supported by experience in React for frontend integration. 💻",
+                    "High-performance SQL and robust C# backends are her main playground, ensuring data integrity and architectural excellence. 🛠️"
+                ] 
+            },
+            { 
+                id: 'react', 
+                keywords: ['react', 'frontend', 'javascript', 'js'], 
+                responses: [
+                    "While her core mastery is in the backend (.NET/SQL), she is highly comfortable working with React to build integrated full-stack features. 🐾",
+                    "She uses React as a powerful tool in her kit to complement her deep backend expertise, ensuring a smooth end-to-end user experience. 💎",
+                    "She has professional experience in React development, primarily focused on building functional, data-driven interfaces for financial platforms. 🚀"
                 ] 
             },
             { 
@@ -143,22 +153,18 @@
 
         function getAIResponse(input) {
             const lowerInput = input.toLowerCase();
-            
             const learned = learnedMemory.find(m => lowerInput.includes(m.input));
             if (learned) return learned.response;
 
-            // Priority 1: Weather
             const weather = qaBase.find(qa => qa.id === 'weather' && qa.keywords.some(k => lowerInput.includes(k)));
             if (weather) return weather.responses[Math.floor(Math.random() * weather.responses.length)];
 
-            // Priority 2: Greetings & Status
             const greeting = qaBase.find(qa => qa.id === 'greet' && qa.keywords.some(k => lowerInput.includes(k)));
             if (greeting) return greeting.responses[Math.floor(Math.random() * greeting.responses.length)];
 
             const status = qaBase.find(qa => qa.id === 'status' && qa.keywords.some(k => lowerInput.includes(k)));
             if (status) return status.responses[Math.floor(Math.random() * status.responses.length)];
 
-            // Priority 3: Other Professional categories
             for (let qa of qaBase) {
                 if (qa.keywords.some(k => lowerInput.includes(k))) {
                     return qa.responses[Math.floor(Math.random() * qa.responses.length)];
