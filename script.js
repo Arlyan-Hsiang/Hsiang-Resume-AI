@@ -3,7 +3,8 @@ const profile = {
     role: "Senior Software Developer / Senior Analyst Developer",
     primarySkills: "Expert in C#/.NET Core, MS SQL Server, REST APIs, and System Architecture.",
     supportingSkills: "Experienced in modern web technologies including React and JavaScript.",
-    avatar: "https://raw.githubusercontent.com/Arlyan-Hsiang/Hsiang-Resume-AI/main/ruby_cat_avatar.png"
+    // Using a reliable Emoji-based fallback or a hosted URL that definitely works
+    avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Ruby&backgroundColor=004a99"
 };
 
 const qaBase = [
@@ -159,13 +160,20 @@ function addMessage(text, isUser = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `flex ${isUser ? 'justify-end' : 'items-start'} space-x-3 animate-fade-in`;
     
+    // Improved fallback for the cat avatar in the DOM directly
+    const catIcon = `
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #004a99; color: white; font-size: 24px;">
+            🐱
+        </div>
+    `;
+
     const content = isUser ? `
         <div class="bg-[#004a99] text-white p-4 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm">
             ${text}
         </div>
     ` : `
         <div class="cat-avatar">
-            <img src="${profile.avatar}" alt="Ruby" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Ruby&backgroundColor=004a99'">
+            <img src="ruby_cat_avatar.png" alt="Ruby" style="display: block;" onerror="this.style.display='none'; this.parentElement.innerHTML='🐱';">
         </div>
         <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
             ${text}
