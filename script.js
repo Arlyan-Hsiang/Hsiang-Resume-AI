@@ -8,6 +8,14 @@ const profile = {
 
 const intentMap = [
     { 
+        id: 'tech', 
+        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery', 'tell', 'about', 'profile', 'her'], 
+        responses: [
+            `Hsiang is a senior developer specializing in <strong>C#/.NET Core and MS SQL Server</strong>. She focuses on building high-performance financial systems. 🐾`,
+            "She combines deep backend expertise with a strong understanding of financial business logic, making her a unique asset for Fintech platforms. 💻"
+        ]
+    },
+    { 
         id: 'value', 
         semantics: ['value', 'why', 'hire', 'fit', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit'], 
         responses: [
@@ -16,16 +24,8 @@ const intentMap = [
         ]
     },
     { 
-        id: 'tech', 
-        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery'], 
-        responses: [
-            `Her core expertise is in <strong>C#/.NET Core and MS SQL Server</strong>. She specializes in high-performance financial backend systems. 🐾`,
-            "She is a senior backend developer who also uses React to build integrated full-stack features for complex financial platforms. 💻"
-        ]
-    },
-    { 
         id: 'weather', 
-        semantics: ['weather', 'sunny', 'rain', 'climate', 'today', 'outside'], 
+        semantics: ['weather', 'sunny', 'rain', 'climate', 'forecast', 'outside'], 
         responses: [
             "Auckland's weather is always a surprise! 🌦️ But inside this chat, it's always purr-fectly productive. 🐾",
             "Classical Auckland: four seasons in one day! Luckily, Hsiang's code is much more stable than the clouds. 💎"
@@ -56,13 +56,23 @@ function getIntent(input) {
     const tokens = input.toLowerCase().split(/[\s,?.!]+/).filter(t => t.length > 2);
     let bestMatch = { id: null, score: 0 };
 
+    // Special check for "Tell me about her" - high priority for tech/background
+    if (input.toLowerCase().includes("tell me about her") || input.toLowerCase().includes("who is she")) {
+        return 'tech';
+    }
+
     for (let intent of intentMap) {
+        // High priority for professional intents
+        let weight = (intent.id === 'tech' || intent.id === 'value') ? 1.5 : 1.0;
         let matches = tokens.filter(t => intent.semantics.includes(t)).length;
+        
         if (matches === 0) {
             matches = tokens.filter(t => intent.semantics.some(s => t.includes(s) || s.includes(t))).length;
         }
-        if (matches > bestMatch.score) {
-            bestMatch = { id: intent.id, score: matches };
+        
+        let score = matches * weight;
+        if (score > bestMatch.score) {
+            bestMatch = { id: intent.id, score: score };
         }
     }
     return bestMatch.score > 0 ? bestMatch.id : null;
@@ -71,15 +81,14 @@ function getIntent(input) {
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase().trim();
 
-    // 1. Check Long-term Memory (Self-Learned Facts)
+    // 1. Long-term Memory recall
     for (let key in longTermMemory) {
         if (lowerInput.includes(key)) {
-            return `I've learned this about ${key}: ${longTermMemory[key]} 🐱🧠 (Memory recalled!)`;
+            return `Memory recalled: About ${key}, ${longTermMemory[key]} 🐱🧠`;
         }
     }
 
-    // 2. Learning Mechanism (Teach Ruby)
-    // Pattern: "Remember that [subject] is [fact]"
+    // 2. Learning Mechanism
     if (lowerInput.includes("remember that") && lowerInput.includes("is")) {
         const part = lowerInput.split("remember that")[1].trim();
         const [subject, ...factParts] = part.split(" is ");
@@ -87,7 +96,7 @@ function getAIResponse(input) {
         if (subject && fact) {
             longTermMemory[subject.trim()] = fact.trim();
             localStorage.setItem('ruby_long_term_memory', JSON.stringify(longTermMemory));
-            return `Meow! My semantic brain has stored this: <strong>${subject}</strong> is <strong>${fact}</strong>. I'll remember this for you! 🧠✨`;
+            return `Stored! <strong>${subject}</strong> is <strong>${fact}</strong>. 🧠✨`;
         }
     }
 
@@ -99,12 +108,12 @@ function getAIResponse(input) {
             if (name.length > 1) {
                 recruiterName = name.charAt(0).toUpperCase() + name.slice(1);
                 localStorage.setItem('recruiter_name', recruiterName);
-                return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 How can I help you?`;
+                return `Nice to meet you, <strong>${recruiterName}</strong>! 🐾 How can I help you explore Hsiang's journey?`;
             }
         }
     }
 
-    // 4. Intent Matching
+    // 4. Intent Matching with Logic Fix
     const intentId = getIntent(input);
     if (intentId) {
         const intent = intentMap.find(i => i.id === intentId);
@@ -113,12 +122,7 @@ function getAIResponse(input) {
         return resp;
     }
 
-    // 5. Associative Learning (Ask for details)
-    if (lowerInput.split(" ").length > 3) {
-        return `Meow! I'm still learning about "${input}". You can teach me by saying: "Ruby, remember that [subject] is [fact]"! 🐾📖`;
-    }
-
-    return "Meow! I'm not quite sure, but feel free to ask about Hsiang's <strong>expertise</strong> or <strong>value</strong>! 🐾";
+    return "Meow! I'm still learning. Try asking about Hsiang's <strong>tech stack</strong>, <strong>experience</strong>, or <strong>why she is a great fit</strong>! 🐾";
 }
 
 function addMessage(text, isUser = false) {
@@ -151,7 +155,7 @@ function clearMemory() {
 
 window.onload = () => {
     if (recruiterName) {
-        document.getElementById('welcome-msg').innerHTML = `Welcome back, <strong>${recruiterName}</strong>! 🐾✨<br><br>I'm Ruby, Hsiang's evolving assistant. How can I help you today?`;
+        document.getElementById('welcome-msg').innerHTML = `Welcome back, <strong>${recruiterName}</strong>! 🐾✨<br><br>I'm Ruby, ready to discuss Hsiang's <strong>senior expertise</strong>. How can I help you?`;
     }
     const input = document.getElementById('user-input-field');
     input.focus();
