@@ -91,19 +91,19 @@ function clearMemory() {
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase();
     
-    const namePatterns = [
-        /my name is ([a-zA-Z\s]+)/i,
-        /i am ([a-zA-Z\s]+)/i,
-        /call me ([a-zA-Z\s]+)/i,
-        /this is ([a-zA-Z\s]+)/i
-    ];
+    // Improved name recognition with stop words and splitting
+    const nameIntros = ["my name is", "i am", "call me", "this is", "i'm"];
+    const stopWords = ["how", "what", "nice", "to", "meet", "and", "is", "a", "an", "the"];
 
-    for (let pattern of namePatterns) {
-        const match = input.match(pattern);
-        if (match && match[1]) {
-            const potentialName = match[1].trim();
-            if (potentialName.length > 1 && potentialName.length < 30) {
-                recruiterName = potentialName;
+    for (let intro of nameIntros) {
+        if (lowerInput.includes(intro)) {
+            let partAfterIntro = lowerInput.split(intro)[1].trim();
+            // Split by common punctuation or conjunctions to isolate the name
+            let potentialName = partAfterIntro.split(/[\s,;.!]+|and|how|nice/)[0];
+            
+            if (potentialName && !stopWords.includes(potentialName) && potentialName.length > 1) {
+                // Capitalize first letter for presentation
+                recruiterName = potentialName.charAt(0).toUpperCase() + potentialName.slice(1);
                 localStorage.setItem('recruiter_name', recruiterName);
                 return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 I've noted your name. Now, how can I help you discover Hsiang's amazing professional journey? ✨`;
             }
