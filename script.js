@@ -3,7 +3,7 @@ const profile = {
     role: "Senior Software Developer / Senior Analyst Developer",
     primarySkills: "Expert in C#/.NET Core, MS SQL Server, REST APIs, and System Architecture.",
     supportingSkills: "Experienced in modern web technologies including React and JavaScript.",
-    avatar: "https://raw.githubusercontent.com/openclaw/openclaw/main/assets/ruby_cat_avatar.png"
+    avatar: "https://raw.githubusercontent.com/Arlyan-Hsiang/Hsiang-Resume-AI/main/ruby_cat_avatar.png"
 };
 
 const qaBase = [
@@ -18,7 +18,7 @@ const qaBase = [
     },
     { 
         id: 'value', 
-        keywords: ['value', 'fit', 'why', 'hire', 'advantage', 'need', 'suit', 'company', 'worth'], 
+        keywords: ['value', 'fit', 'why', 'hire', 'advantage', 'need', 'suit', 'company', 'worth', 'expertise', 'specialist'], 
         responses: [
             "Hsiang brings a <strong>rare fusion</strong> of senior engineering expertise and a Master's in Accounting. She doesn't just write code; she builds robust financial solutions. 🐾",
             "She's the bridge between tech and business! With 9+ years in Fintech, she ensures code aligns perfectly with financial accuracy. 💎",
@@ -91,7 +91,6 @@ function clearMemory() {
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase();
     
-    // Improved name recognition using simpler string split and better cleaning
     const nameIntros = ["my name is", "i am", "call me", "this is", "i'm"];
     
     for (let intro of nameIntros) {
@@ -99,10 +98,8 @@ function getAIResponse(input) {
             const parts = lowerInput.split(intro);
             if (parts.length > 1) {
                 let remaining = parts[1].trim();
-                // Pick the first word only to avoid catching the rest of the sentence
                 let firstWord = remaining.split(/[\s,;.!?]+|and|how|nice/)[0].trim();
                 
-                // Filter out common stop words if the first word is too generic
                 const stopWords = ["the", "a", "an", "this", "that", "it", "his", "her"];
                 if (firstWord && firstWord.length > 1 && !stopWords.includes(firstWord)) {
                     recruiterName = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
@@ -168,7 +165,7 @@ function addMessage(text, isUser = false) {
         </div>
     ` : `
         <div class="cat-avatar">
-            <img src="${profile.avatar}" alt="Ruby" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHRleHQgeT0iMjAiIGZvbnQtc2l6ZT0iMjAiPvCfk🐱PC90ZXh0Pjwvc3ZnPg=='">
+            <img src="${profile.avatar}" alt="Ruby" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Ruby&backgroundColor=004a99'">
         </div>
         <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
             ${text}
