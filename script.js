@@ -9,7 +9,7 @@ const profile = {
 const intentMap = [
     { 
         id: 'tech', 
-        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery', 'tell', 'about', 'profile', 'her'], 
+        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery', 'profile', 'software', 'developer'], 
         responses: [
             `Hsiang is a senior developer specializing in <strong>C#/.NET Core and MS SQL Server</strong>. She focuses on building high-performance financial systems. 🐾`,
             "She combines deep backend expertise with a strong understanding of financial business logic, making her a unique asset for Fintech platforms. 💻"
@@ -17,7 +17,7 @@ const intentMap = [
     },
     { 
         id: 'value', 
-        semantics: ['value', 'why', 'hire', 'fit', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit'], 
+        semantics: ['value', 'why', 'hire', 'fit', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit', 'suit'], 
         responses: [
             "Hsiang brings a rare fusion of senior engineering expertise and a Master's in Accounting. She builds robust financial solutions that make sense for the business. 🐾",
             "She's the bridge between tech and finance! With 9+ years in the industry, she ensures every line of code aligns with financial accuracy. 💎"
@@ -25,7 +25,7 @@ const intentMap = [
     },
     { 
         id: 'weather', 
-        semantics: ['weather', 'sunny', 'rain', 'climate', 'forecast', 'outside'], 
+        semantics: ['weather', 'sunny', 'rain', 'climate', 'forecast', 'outside', 'temperature'], 
         responses: [
             "Auckland's weather is always a surprise! 🌦️ But inside this chat, it's always purr-fectly productive. 🐾",
             "Classical Auckland: four seasons in one day! Luckily, Hsiang's code is much more stable than the clouds. 💎"
@@ -41,7 +41,7 @@ const intentMap = [
     },
     { 
         id: 'status', 
-        semantics: ['how', 'going', 'doing', 'you', 'up'], 
+        semantics: ['how are you', 'how is it going', 'how are things', 'how is your day'], 
         responses: [
             "I'm purring with excitement! Just keeping an eye on this impressive resume. How about you? 😊",
             "Doing great! I love talking about Hsiang's achievements. It's a busy day for a digital cat! 🐾"
@@ -53,29 +53,35 @@ let recruiterName = localStorage.getItem('recruiter_name') || null;
 let longTermMemory = JSON.parse(localStorage.getItem('ruby_long_term_memory') || '{}');
 
 function getIntent(input) {
-    const tokens = input.toLowerCase().split(/[\s,?.!]+/).filter(t => t.length > 2);
-    let bestMatch = { id: null, score: 0 };
-
-    // Special check for "Tell me about her" - high priority for tech/background
-    if (input.toLowerCase().includes("tell me about her") || input.toLowerCase().includes("who is she")) {
+    const inputLower = input.toLowerCase().trim();
+    const tokens = inputLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
+    
+    // STRICT CHECK: Only trigger weather if explicit weather keywords exist
+    const weatherKeywords = ['weather', 'sunny', 'rain', 'forecast', 'climate', 'temperature'];
+    const hasWeatherTerm = tokens.some(t => weatherKeywords.includes(t));
+    
+    // HARD RULES for specific phrases
+    if (inputLower.includes("tell me about") || inputLower.includes("who is") || inputLower.includes("profile")) {
         return 'tech';
     }
 
+    let bestMatch = { id: null, score: 0 };
     for (let intent of intentMap) {
-        // High priority for professional intents
-        let weight = (intent.id === 'tech' || intent.id === 'value') ? 1.5 : 1.0;
-        let matches = tokens.filter(t => intent.semantics.includes(t)).length;
+        // Prevent accidental weather triggers
+        if (intent.id === 'weather' && !hasWeatherTerm) continue;
+
+        let score = tokens.filter(t => intent.semantics.includes(t)).length;
         
-        if (matches === 0) {
-            matches = tokens.filter(t => intent.semantics.some(s => t.includes(s) || s.includes(t))).length;
-        }
-        
-        let score = matches * weight;
+        // Boost professional intents
+        if (intent.id === 'tech' || intent.id === 'value') score *= 1.5;
+
         if (score > bestMatch.score) {
             bestMatch = { id: intent.id, score: score };
         }
     }
-    return bestMatch.score > 0 ? bestMatch.id : null;
+
+    // REQUIRE CONFIDENCE: If score is too low, we don't guess
+    return (bestMatch.score >= 1.0) ? bestMatch.id : null;
 }
 
 function getAIResponse(input) {
@@ -83,7 +89,7 @@ function getAIResponse(input) {
 
     // 1. Long-term Memory recall
     for (let key in longTermMemory) {
-        if (lowerInput.includes(key)) {
+        if (lowerInput.includes(key.toLowerCase())) {
             return `Memory recalled: About ${key}, ${longTermMemory[key]} 🐱🧠`;
         }
     }
@@ -104,16 +110,21 @@ function getAIResponse(input) {
     const nameIntros = ["my name is ", "i am ", "call me ", "i'm "];
     for (let intro of nameIntros) {
         if (lowerInput.includes(intro)) {
-            let name = lowerInput.split(intro)[1].trim().split(" ")[0].replace(/[^a-zA-Z]/g, "");
+            let namePart = lowerInput.split(intro)[1].trim();
+            let name = namePart.split(" ")[0].replace(/[^a-zA-Z]/g, "");
             if (name.length > 1) {
-                recruiterName = name.charAt(0).toUpperCase() + name.slice(1);
-                localStorage.setItem('recruiter_name', recruiterName);
-                return `Nice to meet you, <strong>${recruiterName}</strong>! 🐾 How can I help you explore Hsiang's journey?`;
+                // Ensure name isn't a common word like "how"
+                const commonWords = ["how", "what", "is", "not", "the"];
+                if (!commonWords.includes(name)) {
+                    recruiterName = name.charAt(0).toUpperCase() + name.slice(1);
+                    localStorage.setItem('recruiter_name', recruiterName);
+                    return `Nice to meet you, <strong>${recruiterName}</strong>! 🐾 How can I help you explore Hsiang's journey?`;
+                }
             }
         }
     }
 
-    // 4. Intent Matching with Logic Fix
+    // 4. Intent Matching
     const intentId = getIntent(input);
     if (intentId) {
         const intent = intentMap.find(i => i.id === intentId);
@@ -122,7 +133,10 @@ function getAIResponse(input) {
         return resp;
     }
 
-    return "Meow! I'm still learning. Try asking about Hsiang's <strong>tech stack</strong>, <strong>experience</strong>, or <strong>why she is a great fit</strong>! 🐾";
+    // 5. UNCERTAINTY FALLBACK (Better to admit ignorance than guess wrong)
+    return recruiterName 
+        ? `Meow~ ${recruiterName}, I'm not entirely sure what you mean by that. Could you ask me about Hsiang's <strong>tech stack</strong>, <strong>experience</strong>, or <strong>why she's a great fit</strong>? 🐾`
+        : "Meow! I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>background</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾";
 }
 
 function addMessage(text, isUser = false) {
