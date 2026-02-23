@@ -91,21 +91,24 @@ function clearMemory() {
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase();
     
-    // Improved name recognition with stop words and splitting
+    // Improved name recognition using simpler string split and better cleaning
     const nameIntros = ["my name is", "i am", "call me", "this is", "i'm"];
-    const stopWords = ["how", "what", "nice", "to", "meet", "and", "is", "a", "an", "the"];
-
+    
     for (let intro of nameIntros) {
         if (lowerInput.includes(intro)) {
-            let partAfterIntro = lowerInput.split(intro)[1].trim();
-            // Split by common punctuation or conjunctions to isolate the name
-            let potentialName = partAfterIntro.split(/[\s,;.!]+|and|how|nice/)[0];
-            
-            if (potentialName && !stopWords.includes(potentialName) && potentialName.length > 1) {
-                // Capitalize first letter for presentation
-                recruiterName = potentialName.charAt(0).toUpperCase() + potentialName.slice(1);
-                localStorage.setItem('recruiter_name', recruiterName);
-                return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 I've noted your name. Now, how can I help you discover Hsiang's amazing professional journey? ✨`;
+            const parts = lowerInput.split(intro);
+            if (parts.length > 1) {
+                let remaining = parts[1].trim();
+                // Pick the first word only to avoid catching the rest of the sentence
+                let firstWord = remaining.split(/[\s,;.!?]+|and|how|nice/)[0].trim();
+                
+                // Filter out common stop words if the first word is too generic
+                const stopWords = ["the", "a", "an", "this", "that", "it", "his", "her"];
+                if (firstWord && firstWord.length > 1 && !stopWords.includes(firstWord)) {
+                    recruiterName = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+                    localStorage.setItem('recruiter_name', recruiterName);
+                    return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 I've noted your name. Now, how can I help you discover Hsiang's amazing professional journey? ✨`;
+                }
             }
         }
     }
