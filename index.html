@@ -27,8 +27,24 @@
             -webkit-overflow-scrolling: touch;
         }
         .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .cat-avatar { width: 44px; height: 44px; background-color: #004a99; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; }
-        .cat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* THE ABSOLUTE FIX: Inline SVG for Avatar - No external file needed */
+        .cat-avatar { 
+            width: 44px; 
+            height: 44px; 
+            background-color: #004a99; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            border: 2px solid white; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            flex-shrink: 0;
+            color: white;
+            font-size: 24px;
+        }
+        
         .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -46,10 +62,8 @@
 </head>
 <body class="bg-slate-50">
 
-    <!-- Main Card -->
     <div class="main-card flex flex-col max-w-2xl w-full mx-auto bg-white sm:rounded-3xl shadow-2xl overflow-hidden glass-effect border-x border-slate-200 sm:my-4 sm:h-[90vh]">
         
-        <!-- Header -->
         <div class="bg-[#004a99] p-4 sm:p-6 text-white flex items-center justify-between shadow-md z-10">
             <div class="flex items-center space-x-3 sm:space-x-4">
                 <div class="text-2xl sm:text-3xl">🐱💎</div>
@@ -64,13 +78,9 @@
             </div>
         </div>
 
-        <!-- Chat Area -->
         <div id="chat-window" class="chat-container p-4 space-y-4 bg-slate-50/50">
-            <!-- Initial Message -->
             <div class="flex items-start space-x-3">
-                <div class="cat-avatar">
-                    <img src="https://raw.githubusercontent.com/openclaw/openclaw/main/assets/ruby_cat_avatar.png" alt="Ruby" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHRleHQgeT0iMjAiIGZvbnQtc2l6ZT0iMjAiPvCfk🐱PC90ZXh0Pjwvc3ZnPg=='">
-                </div>
+                <div class="cat-avatar">🐱</div>
                 <div id="welcome-msg" class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
                     Hi there! I'm Ruby, Hsiang Tzu's digital cat assistant. 🐱✨<br><br>
                     I can tell you all about her <strong>senior backend expertise, financial logic, and career highlights</strong>.<br><br>
@@ -82,7 +92,6 @@
             </div>
         </div>
 
-        <!-- Input Area -->
         <div class="p-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)]">
             <div class="flex items-center space-x-2">
                 <input type="text" id="user-input-field" placeholder="Type a message..." class="flex-1 bg-slate-100 border-none rounded-full px-5 py-3 text-sm focus:ring-2 focus:ring-[#004a99] transition-all outline-none">
@@ -97,7 +106,6 @@
         </div>
     </div>
 
-    <!-- External Script -->
     <script src="script.js"></script>
 </body>
 </html>

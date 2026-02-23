@@ -3,8 +3,7 @@ const profile = {
     role: "Senior Software Developer / Senior Analyst Developer",
     primarySkills: "Expert in C#/.NET Core, MS SQL Server, REST APIs, and System Architecture.",
     supportingSkills: "Experienced in modern web technologies including React and JavaScript.",
-    // Using a reliable Emoji-based fallback or a hosted URL that definitely works
-    avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Ruby&backgroundColor=004a99"
+    avatar: "🐱" // Simplifying to emoji to ensure 100% display rate
 };
 
 const qaBase = [
@@ -86,7 +85,7 @@ function clearMemory() {
     localStorage.removeItem('recruiter_name');
     learnedMemory = [];
     recruiterName = null;
-    addMessage("My chat memory has been reset! 🧹🐾");
+    location.reload(); // Reload to show cleared state
 }
 
 function getAIResponse(input) {
@@ -100,7 +99,6 @@ function getAIResponse(input) {
             if (parts.length > 1) {
                 let remaining = parts[1].trim();
                 let firstWord = remaining.split(/[\s,;.!?]+|and|how|nice/)[0].trim();
-                
                 const stopWords = ["the", "a", "an", "this", "that", "it", "his", "her"];
                 if (firstWord && firstWord.length > 1 && !stopWords.includes(firstWord)) {
                     recruiterName = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
@@ -114,8 +112,6 @@ function getAIResponse(input) {
     if (lowerInput.includes("my name") && (lowerInput.includes("what") || lowerInput.includes("know"))) {
         if (recruiterName) {
             return `Your name is <strong>${recruiterName}</strong>! I never forget a recruiter who takes an interest in Hsiang. 😉🐾`;
-        } else {
-            return "I don't know your name yet! But I'd love to learn it. You can say 'My name is...' and I'll remember it! 🐱💎";
         }
     }
 
@@ -147,7 +143,7 @@ function getAIResponse(input) {
         const topic = lowerInput.split("her ").pop().replace("?", "").trim();
         const autoResponse = `Hsiang's ${topic} is driven by her 9+ years of engineering excellence and professional dedication. 🐾`;
         saveToMemory(lowerInput, autoResponse);
-        return autoResponse + " (Added to my memory! ✨)";
+        return autoResponse;
     }
 
     return recruiterName 
@@ -160,21 +156,12 @@ function addMessage(text, isUser = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `flex ${isUser ? 'justify-end' : 'items-start'} space-x-3 animate-fade-in`;
     
-    // Improved fallback for the cat avatar in the DOM directly
-    const catIcon = `
-        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #004a99; color: white; font-size: 24px;">
-            🐱
-        </div>
-    `;
-
     const content = isUser ? `
         <div class="bg-[#004a99] text-white p-4 rounded-2xl rounded-tl-none shadow-sm max-w-[85%] text-sm">
             ${text}
         </div>
     ` : `
-        <div class="cat-avatar">
-            <img src="ruby_cat_avatar.png" alt="Ruby" style="display: block;" onerror="this.style.display='none'; this.parentElement.innerHTML='🐱';">
-        </div>
+        <div class="cat-avatar">🐱</div>
         <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
             ${text}
         </div>
