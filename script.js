@@ -9,7 +9,7 @@ const profile = {
 const intentMap = [
     { 
         id: 'value', 
-        semantics: ['value', 'why', 'hire', 'fit', 'good', 'reason', 'advantage', 'better', 'special', 'worth'], 
+        semantics: ['value', 'why', 'hire', 'fit', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit'], 
         responses: [
             "Hsiang brings a rare fusion of senior engineering expertise and a Master's in Accounting. She builds robust financial solutions that make sense for the business. 🐾",
             "She's the bridge between tech and finance! With 9+ years in the industry, she ensures every line of code aligns with financial accuracy. 💎"
@@ -17,7 +17,7 @@ const intentMap = [
     },
     { 
         id: 'tech', 
-        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work'], 
+        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery'], 
         responses: [
             `Her core expertise is in <strong>C#/.NET Core and MS SQL Server</strong>. She specializes in high-performance financial backend systems. 🐾`,
             "She is a senior backend developer who also uses React to build integrated full-stack features for complex financial platforms. 💻"
@@ -35,7 +35,7 @@ const intentMap = [
         id: 'greet', 
         semantics: ['hi', 'hello', 'hey', 'yo', 'greetings', 'ruby'], 
         responses: [
-            "Meow! Hello! I'm Ruby. Ready to tell you all about Hsiang's career. What's on your mind? 🐾✨",
+            "Meow! Hello! I'm Ruby. Ready to tell you everything about Hsiang's career. What's on your mind? 🐾✨",
             "Hi there! Yes, I'm Ruby. How can I help you explore her background today? 🐱💎"
         ]
     },
@@ -50,19 +50,17 @@ const intentMap = [
 ];
 
 let recruiterName = localStorage.getItem('recruiter_name') || null;
+let longTermMemory = JSON.parse(localStorage.getItem('ruby_long_term_memory') || '{}');
 
-// The "Brain": Simple Semantic Similarity (Jaccard Index inspired)
 function getIntent(input) {
     const tokens = input.toLowerCase().split(/[\s,?.!]+/).filter(t => t.length > 2);
     let bestMatch = { id: null, score: 0 };
 
     for (let intent of intentMap) {
         let matches = tokens.filter(t => intent.semantics.includes(t)).length;
-        // Check for specific substrings if exact token doesn't match
         if (matches === 0) {
             matches = tokens.filter(t => intent.semantics.some(s => t.includes(s) || s.includes(t))).length;
         }
-        
         if (matches > bestMatch.score) {
             bestMatch = { id: intent.id, score: matches };
         }
@@ -71,9 +69,29 @@ function getIntent(input) {
 }
 
 function getAIResponse(input) {
-    const lowerInput = input.toLowerCase();
+    const lowerInput = input.toLowerCase().trim();
 
-    // 1. Name Recognition (Strict isolation)
+    // 1. Check Long-term Memory (Self-Learned Facts)
+    for (let key in longTermMemory) {
+        if (lowerInput.includes(key)) {
+            return `I've learned this about ${key}: ${longTermMemory[key]} 🐱🧠 (Memory recalled!)`;
+        }
+    }
+
+    // 2. Learning Mechanism (Teach Ruby)
+    // Pattern: "Remember that [subject] is [fact]"
+    if (lowerInput.includes("remember that") && lowerInput.includes("is")) {
+        const part = lowerInput.split("remember that")[1].trim();
+        const [subject, ...factParts] = part.split(" is ");
+        const fact = factParts.join(" is ").replace(/[?.!]/g, "");
+        if (subject && fact) {
+            longTermMemory[subject.trim()] = fact.trim();
+            localStorage.setItem('ruby_long_term_memory', JSON.stringify(longTermMemory));
+            return `Meow! My semantic brain has stored this: <strong>${subject}</strong> is <strong>${fact}</strong>. I'll remember this for you! 🧠✨`;
+        }
+    }
+
+    // 3. Name Recognition
     const nameIntros = ["my name is ", "i am ", "call me ", "i'm "];
     for (let intro of nameIntros) {
         if (lowerInput.includes(intro)) {
@@ -81,12 +99,12 @@ function getAIResponse(input) {
             if (name.length > 1) {
                 recruiterName = name.charAt(0).toUpperCase() + name.slice(1);
                 localStorage.setItem('recruiter_name', recruiterName);
-                return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 How can I help you explore Hsiang's journey?`;
+                return `It's a pleasure to meet you, <strong>${recruiterName}</strong>! 🐾 How can I help you?`;
             }
         }
     }
 
-    // 2. Semantic Intent Matching
+    // 4. Intent Matching
     const intentId = getIntent(input);
     if (intentId) {
         const intent = intentMap.find(i => i.id === intentId);
@@ -95,9 +113,12 @@ function getAIResponse(input) {
         return resp;
     }
 
-    return recruiterName 
-        ? `Meow~ ${recruiterName}, I'm not 100% sure about that, but I'd love to tell you about Hsiang's <strong>expertise</strong> or <strong>value</strong>! 🐾`
-        : "Meow! I'm not quite sure what you mean, but feel free to ask about her <strong>expertise</strong>, <strong>value</strong>, or her <strong>FNZ background</strong>! 🐾";
+    // 5. Associative Learning (Ask for details)
+    if (lowerInput.split(" ").length > 3) {
+        return `Meow! I'm still learning about "${input}". You can teach me by saying: "Ruby, remember that [subject] is [fact]"! 🐾📖`;
+    }
+
+    return "Meow! I'm not quite sure, but feel free to ask about Hsiang's <strong>expertise</strong> or <strong>value</strong>! 🐾";
 }
 
 function addMessage(text, isUser = false) {
@@ -130,7 +151,7 @@ function clearMemory() {
 
 window.onload = () => {
     if (recruiterName) {
-        document.getElementById('welcome-msg').innerHTML = `Welcome back, <strong>${recruiterName}</strong>! 🐾✨<br><br>I'm Ruby, and I'm ready to discuss Hsiang's <strong>senior expertise</strong>. How can I help you?`;
+        document.getElementById('welcome-msg').innerHTML = `Welcome back, <strong>${recruiterName}</strong>! 🐾✨<br><br>I'm Ruby, Hsiang's evolving assistant. How can I help you today?`;
     }
     const input = document.getElementById('user-input-field');
     input.focus();
