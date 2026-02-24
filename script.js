@@ -2,8 +2,8 @@ const profile = {
     name: "Hsiang Tzu Tseng",
     role: "Senior Software Developer",
     expertise: "Senior Backend Specialist in C#/.NET Core and SQL Server, with experience in React.",
-    value: "Rare combination of 9+ years senior engineering and a Master's in Accounting, bridging the gap between complex financial logic and robust code.",
-    background: "Currently Senior Analyst Developer at FNZ Auckland, previously worked at Cybersoft and PSA. Master's from UoA."
+    value: "Rare combination of 9+ years senior engineering and a Master of Management specialized in Accounting, bridging the gap between complex financial logic and robust code.",
+    background: "Currently Senior Analyst Developer at FNZ Auckland, previously worked at Cybersoft and PSA. Master of Management from University of Auckland."
 };
 
 const intentMap = [
@@ -19,8 +19,16 @@ const intentMap = [
         id: 'value', 
         semantics: ['value', 'values', 'fit', 'why', 'hire', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit', 'suit'], 
         responses: [
-            "Hsiang brings a rare fusion of senior engineering expertise and a Master's in Accounting. She builds robust financial solutions that make sense for the business. 🐾",
-            "She's the bridge between tech and finance! With 9+ years in the industry, she ensures every line of code aligns with financial accuracy. 💎"
+            "Hsiang brings a rare fusion of senior engineering expertise and a <strong>Master of Management specialized in Accounting</strong>. She builds robust financial solutions that make sense for the business. 🐾",
+            "She's the bridge between tech and business! With 9+ years in the industry and a Master of Management from UoA, she ensures every line of code aligns with financial accuracy. 💎"
+        ]
+    },
+    { 
+        id: 'edu', 
+        semantics: ['education', 'school', 'university', 'master', 'degree', 'qualification', 'study'], 
+        responses: [
+            "Hsiang holds a <strong>Master of Management specialized in Accounting</strong> from the University of Auckland. This gives her a sophisticated understanding of business operations and financial logic. 🎓",
+            "She completed her Master of Management at UoA, with a specific focus on Accounting. This academic background perfectly complements her technical seniority in Fintech. 🐾"
         ]
     },
     { 
@@ -54,10 +62,8 @@ let longTermMemory = JSON.parse(localStorage.getItem('ruby_long_term_memory') ||
 
 function getIntent(input) {
     const inputLower = input.toLowerCase().trim();
-    // Improved tokenizer to handle plurals like 'values'
     const tokens = inputLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
     
-    // Check specific phrases or single-token semantic matches
     const weatherKeywords = ['weather', 'sunny', 'rain', 'forecast', 'climate', 'temperature'];
     const hasWeatherTerm = tokens.some(t => weatherKeywords.includes(t));
     
@@ -69,13 +75,12 @@ function getIntent(input) {
     for (let intent of intentMap) {
         if (intent.id === 'weather' && !hasWeatherTerm) continue;
 
-        // Count direct matches and substring matches for plurals
         let score = tokens.filter(t => 
             intent.semantics.includes(t) || 
             intent.semantics.some(s => t.startsWith(s) && t.length <= s.length + 1)
         ).length;
         
-        if (intent.id === 'tech' || intent.id === 'value') score *= 1.5;
+        if (intent.id === 'tech' || intent.id === 'value' || intent.id === 'edu') score *= 1.5;
 
         if (score > bestMatch.score) {
             bestMatch = { id: intent.id, score: score };
