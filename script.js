@@ -59,23 +59,23 @@ const intentMap = [
 
 let recruiterName = localStorage.getItem('recruiter_name') || null;
 let longTermMemory = JSON.parse(localStorage.getItem('ruby_long_term_memory') || '{}');
+let chatHistory = []; // Local session history
 
 function getIntent(input) {
     const inputLower = input.toLowerCase().trim();
     const tokens = inputLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
     
-    // Catch "Anything else?" and similar follow-ups
-    if (inputLower.includes("anything else") || inputLower.includes("what else") || inputLower.includes("more")) {
-        return 'more';
+    // Check context for "Anything else" or "Tell me more"
+    if (inputLower.includes("anything else") || inputLower.includes("what else") || inputLower.includes("tell me more") || inputLower.includes("more")) {
+        // If they ask "more", look at what was last discussed
+        const lastIntent = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1].intentId : null;
+        if (lastIntent === 'tech') return 'edu'; // If we talked tech, tell about education
+        if (lastIntent === 'edu') return 'value'; // If we talked edu, tell about value
+        return 'more'; // Random highlight
     }
 
-    if (inputLower.includes("education") || inputLower.includes("degree") || inputLower.includes("study")) {
-        return 'edu';
-    }
-
-    if (inputLower.includes("tell me about") || inputLower.includes("who is") || inputLower.includes("profile")) {
-        return 'tech';
-    }
+    if (inputLower.includes("education") || inputLower.includes("degree") || inputLower.includes("study")) return 'edu';
+    if (inputLower.includes("tell me about") || inputLower.includes("who is") || inputLower.includes("profile")) return 'tech';
 
     let bestMatch = { id: null, score: 0 };
     for (let intent of intentMap) {
@@ -100,22 +100,7 @@ function getIntent(input) {
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase().trim();
 
-    // Special handler for follow-up prompts
-    if (getIntent(input) === 'more') {
-        const choices = [
-            "I'd love to tell you more! Did you know Hsiang has a <strong>Master of Management</strong> in addition to her 9+ years of dev experience? 🎓",
-            "Beyond her technical skills, she's an expert in <strong>financial business logic</strong> due to her accounting background. Shall we dive deeper? 💎",
-            "She's also very experienced with <strong>TDD and CI/CD pipelines</strong>, ensuring high-quality delivery. Want to hear more about her FNZ projects? 🚀"
-        ];
-        return choices[Math.floor(Math.random() * choices.length)];
-    }
-
-    for (let key in longTermMemory) {
-        if (lowerInput.includes(key.toLowerCase())) {
-            return `Memory recalled: About ${key}, ${longTermMemory[key]} 🐱🧠`;
-        }
-    }
-
+    // Contextual Learning
     if (lowerInput.includes("remember that") && lowerInput.includes("is")) {
         const part = lowerInput.split("remember that")[1].trim();
         const [subject, ...factParts] = part.split(" is ");
@@ -127,6 +112,7 @@ function getAIResponse(input) {
         }
     }
 
+    // Name Recognition
     const nameIntros = ["my name is ", "i am ", "call me ", "i'm "];
     for (let intro of nameIntros) {
         if (lowerInput.includes(intro)) {
@@ -143,7 +129,27 @@ function getAIResponse(input) {
         }
     }
 
+    // Recall Memory
+    for (let key in longTermMemory) {
+        if (lowerInput.includes(key.toLowerCase())) {
+            return `Recalling my notes: ${key} is ${longTermMemory[key]} 🐱🧠`;
+        }
+    }
+
     const intentId = getIntent(input);
+    
+    // History Tracking
+    chatHistory.push({ input: lowerInput, intentId: intentId });
+
+    if (intentId === 'more') {
+        const choices = [
+            "Did you know Hsiang has a <strong>Master of Management</strong>? It really helps her understand the 'why' behind financial software. 🎓",
+            "She's also an expert in <strong>CI/CD and TDD</strong>. She's all about high-quality, reliable code! 💎",
+            "Besides tech, she has 9+ years in the industry, including major migrations and API developments. 🚀"
+        ];
+        return "Of course! " + choices[Math.floor(Math.random() * choices.length)];
+    }
+
     if (intentId) {
         const intent = intentMap.find(i => i.id === intentId);
         let resp = intent.responses[Math.floor(Math.random() * intent.responses.length)];
@@ -151,9 +157,10 @@ function getAIResponse(input) {
         return resp;
     }
 
+    // Default Fallback
     return recruiterName 
-        ? `Meow~ ${recruiterName}, I'm not entirely sure about that specific detail. Feel free to ask about Hsiang's <strong>Master's degree</strong>, <strong>tech skills</strong>, or <strong>value</strong>! 🐾`
-        : "Meow! I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>Master's degree</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾";
+        ? `Meow~ ${recruiterName}, I'm not entirely sure about that. Try asking about her <strong>technical stack</strong>, <strong>values</strong>, or <strong>education</strong>! 🐾`
+        : "Meow! I'm still learning. Please ask me about Hsiang's <strong>background</strong>, <strong>skills</strong>, or <strong>values</strong>! 🐾";
 }
 
 function addMessage(text, isUser = false) {
