@@ -8,8 +8,16 @@ const profile = {
 
 const intentMap = [
     { 
+        id: 'edu', 
+        semantics: ['education', 'background', 'school', 'university', 'master', 'degree', 'qualification', 'study', 'academic'], 
+        responses: [
+            "Hsiang holds a <strong>Master of Management specialized in Accounting</strong> from the University of Auckland. This gives her a sophisticated understanding of business operations and financial logic. 🎓",
+            "She completed her Master of Management at UoA, with a specific focus on Accounting. This academic background perfectly complements her technical seniority in Fintech. 🐾"
+        ]
+    },
+    { 
         id: 'tech', 
-        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery', 'profile', 'software', 'developer'], 
+        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'work', 'mastery', 'profile', 'software', 'developer'], 
         responses: [
             `Hsiang is a senior developer specializing in <strong>C#/.NET Core and MS SQL Server</strong>. She focuses on building high-performance financial systems. 🐾`,
             "She combines deep backend expertise with a strong understanding of financial business logic, making her a unique asset for Fintech platforms. 💻"
@@ -19,16 +27,8 @@ const intentMap = [
         id: 'value', 
         semantics: ['value', 'values', 'fit', 'why', 'hire', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit', 'suit'], 
         responses: [
-            "Hsiang brings a rare fusion of senior engineering expertise and a <strong>Master of Management specialized in Accounting</strong>. She builds robust financial solutions that make sense for the business. 🐾",
-            "She's the bridge between tech and business! With 9+ years in the industry and a Master of Management from UoA, she ensures every line of code aligns with financial accuracy. 💎"
-        ]
-    },
-    { 
-        id: 'edu', 
-        semantics: ['education', 'school', 'university', 'master', 'degree', 'qualification', 'study'], 
-        responses: [
-            "Hsiang holds a <strong>Master of Management specialized in Accounting</strong> from the University of Auckland. This gives her a sophisticated understanding of business operations and financial logic. 🎓",
-            "She completed her Master of Management at UoA, with a specific focus on Accounting. This academic background perfectly complements her technical seniority in Fintech. 🐾"
+            "Hsiang brings a rare fusion of senior engineering expertise and a Master's in Accounting. She builds robust financial solutions that make sense for the business. 🐾",
+            "She's the bridge between tech and finance! With 9+ years in the industry, she ensures every line of code aligns with financial accuracy. 💎"
         ]
     },
     { 
@@ -64,23 +64,27 @@ function getIntent(input) {
     const inputLower = input.toLowerCase().trim();
     const tokens = inputLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
     
-    const weatherKeywords = ['weather', 'sunny', 'rain', 'forecast', 'climate', 'temperature'];
-    const hasWeatherTerm = tokens.some(t => weatherKeywords.includes(t));
-    
+    // Explicit phrase matching for Education to prevent "background" confusion
+    if (inputLower.includes("education") || inputLower.includes("degree") || inputLower.includes("study")) {
+        return 'edu';
+    }
+
     if (inputLower.includes("tell me about") || inputLower.includes("who is") || inputLower.includes("profile")) {
         return 'tech';
     }
 
     let bestMatch = { id: null, score: 0 };
     for (let intent of intentMap) {
-        if (intent.id === 'weather' && !hasWeatherTerm) continue;
+        if (intent.id === 'weather' && !tokens.some(t => ['weather', 'sunny', 'rain'].includes(t))) continue;
 
         let score = tokens.filter(t => 
             intent.semantics.includes(t) || 
             intent.semantics.some(s => t.startsWith(s) && t.length <= s.length + 1)
         ).length;
         
-        if (intent.id === 'tech' || intent.id === 'value' || intent.id === 'edu') score *= 1.5;
+        // Priority adjustment
+        if (intent.id === 'edu') score *= 2.0; 
+        if (intent.id === 'tech' || intent.id === 'value') score *= 1.2;
 
         if (score > bestMatch.score) {
             bestMatch = { id: intent.id, score: score };
@@ -135,8 +139,8 @@ function getAIResponse(input) {
     }
 
     return recruiterName 
-        ? `Meow~ ${recruiterName}, I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>background</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾`
-        : "Meow! I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>background</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾";
+        ? `Meow~ ${recruiterName}, I'm not entirely sure about that specific detail. Feel free to ask about Hsiang's <strong>Master's degree</strong>, <strong>tech skills</strong>, or <strong>value</strong>! 🐾`
+        : "Meow! I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>Master's degree</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾";
 }
 
 function addMessage(text, isUser = false) {
