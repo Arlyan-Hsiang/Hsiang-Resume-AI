@@ -17,7 +17,7 @@ const intentMap = [
     },
     { 
         id: 'value', 
-        semantics: ['value', 'why', 'hire', 'fit', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit', 'suit'], 
+        semantics: ['value', 'values', 'fit', 'why', 'hire', 'good', 'reason', 'advantage', 'better', 'special', 'worth', 'benefit', 'suit'], 
         responses: [
             "Hsiang brings a rare fusion of senior engineering expertise and a Master's in Accounting. She builds robust financial solutions that make sense for the business. 🐾",
             "She's the bridge between tech and finance! With 9+ years in the industry, she ensures every line of code aligns with financial accuracy. 💎"
@@ -27,7 +27,7 @@ const intentMap = [
         id: 'weather', 
         semantics: ['weather', 'sunny', 'rain', 'climate', 'forecast', 'outside', 'temperature'], 
         responses: [
-            "Auckland's weather is always a surprise! 🌦️ But inside this chat, it's always purr-fectly productive. 🐾",
+            "Auckland's weather is always an adventure! 🌦️ But inside this chat, it's always purr-fectly productive. 🐾",
             "Classical Auckland: four seasons in one day! Luckily, Hsiang's code is much more stable than the clouds. 💎"
         ]
     },
@@ -54,25 +54,27 @@ let longTermMemory = JSON.parse(localStorage.getItem('ruby_long_term_memory') ||
 
 function getIntent(input) {
     const inputLower = input.toLowerCase().trim();
+    // Improved tokenizer to handle plurals like 'values'
     const tokens = inputLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
     
-    // STRICT CHECK: Only trigger weather if explicit weather keywords exist
+    // Check specific phrases or single-token semantic matches
     const weatherKeywords = ['weather', 'sunny', 'rain', 'forecast', 'climate', 'temperature'];
     const hasWeatherTerm = tokens.some(t => weatherKeywords.includes(t));
     
-    // HARD RULES for specific phrases
     if (inputLower.includes("tell me about") || inputLower.includes("who is") || inputLower.includes("profile")) {
         return 'tech';
     }
 
     let bestMatch = { id: null, score: 0 };
     for (let intent of intentMap) {
-        // Prevent accidental weather triggers
         if (intent.id === 'weather' && !hasWeatherTerm) continue;
 
-        let score = tokens.filter(t => intent.semantics.includes(t)).length;
+        // Count direct matches and substring matches for plurals
+        let score = tokens.filter(t => 
+            intent.semantics.includes(t) || 
+            intent.semantics.some(s => t.startsWith(s) && t.length <= s.length + 1)
+        ).length;
         
-        // Boost professional intents
         if (intent.id === 'tech' || intent.id === 'value') score *= 1.5;
 
         if (score > bestMatch.score) {
@@ -80,21 +82,18 @@ function getIntent(input) {
         }
     }
 
-    // REQUIRE CONFIDENCE: If score is too low, we don't guess
     return (bestMatch.score >= 1.0) ? bestMatch.id : null;
 }
 
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase().trim();
 
-    // 1. Long-term Memory recall
     for (let key in longTermMemory) {
         if (lowerInput.includes(key.toLowerCase())) {
             return `Memory recalled: About ${key}, ${longTermMemory[key]} 🐱🧠`;
         }
     }
 
-    // 2. Learning Mechanism
     if (lowerInput.includes("remember that") && lowerInput.includes("is")) {
         const part = lowerInput.split("remember that")[1].trim();
         const [subject, ...factParts] = part.split(" is ");
@@ -106,14 +105,12 @@ function getAIResponse(input) {
         }
     }
 
-    // 3. Name Recognition
     const nameIntros = ["my name is ", "i am ", "call me ", "i'm "];
     for (let intro of nameIntros) {
         if (lowerInput.includes(intro)) {
             let namePart = lowerInput.split(intro)[1].trim();
             let name = namePart.split(" ")[0].replace(/[^a-zA-Z]/g, "");
             if (name.length > 1) {
-                // Ensure name isn't a common word like "how"
                 const commonWords = ["how", "what", "is", "not", "the"];
                 if (!commonWords.includes(name)) {
                     recruiterName = name.charAt(0).toUpperCase() + name.slice(1);
@@ -124,7 +121,6 @@ function getAIResponse(input) {
         }
     }
 
-    // 4. Intent Matching
     const intentId = getIntent(input);
     if (intentId) {
         const intent = intentMap.find(i => i.id === intentId);
@@ -133,9 +129,8 @@ function getAIResponse(input) {
         return resp;
     }
 
-    // 5. UNCERTAINTY FALLBACK (Better to admit ignorance than guess wrong)
     return recruiterName 
-        ? `Meow~ ${recruiterName}, I'm not entirely sure what you mean by that. Could you ask me about Hsiang's <strong>tech stack</strong>, <strong>experience</strong>, or <strong>why she's a great fit</strong>? 🐾`
+        ? `Meow~ ${recruiterName}, I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>background</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾`
         : "Meow! I'm still learning and I don't want to give you a wrong answer. Please ask me about Hsiang's <strong>background</strong>, <strong>skills</strong>, or <strong>value</strong>! 🐾";
 }
 
