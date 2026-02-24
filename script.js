@@ -3,24 +3,24 @@ const profile = {
     role: "Senior Software Developer",
     expertise: "Senior Backend Specialist in C#/.NET Core and SQL Server, with experience in React.",
     value: "Rare combination of 9+ years senior engineering and a Master of Management specialized in Accounting, bridging the gap between complex financial logic and robust code.",
-    background: "Currently Senior Analyst Developer at FNZ Auckland, previously worked at Cybersoft and PSA. Master of Management from University of Auckland."
+    background: "Currently Senior Analyst Developer at FNZ Auckland, previously worked at Cybersoft and PSA. Master's from UoA."
 };
 
 const intentMap = [
     { 
-        id: 'edu', 
-        semantics: ['education', 'background', 'school', 'university', 'master', 'degree', 'qualification', 'study', 'academic'], 
-        responses: [
-            "Hsiang holds a <strong>Master of Management specialized in Accounting</strong> from the University of Auckland. This gives her a sophisticated understanding of business operations and financial logic. 🎓",
-            "She completed her Master of Management at UoA, with a specific focus on Accounting. This academic background perfectly complements her technical seniority in Fintech. 🐾"
-        ]
-    },
-    { 
         id: 'tech', 
-        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'work', 'mastery', 'profile', 'software', 'developer'], 
+        semantics: ['expertise', 'skill', 'tech', 'stack', 'know', 'language', 'code', 'coding', 'experience', 'background', 'work', 'mastery', 'profile', 'software', 'developer'], 
         responses: [
             `Hsiang is a senior developer specializing in <strong>C#/.NET Core and MS SQL Server</strong>. She focuses on building high-performance financial systems. 🐾`,
             "She combines deep backend expertise with a strong understanding of financial business logic, making her a unique asset for Fintech platforms. 💻"
+        ]
+    },
+    { 
+        id: 'edu', 
+        semantics: ['education', 'school', 'university', 'master', 'degree', 'qualification', 'study', 'academic'], 
+        responses: [
+            "Hsiang holds a <strong>Master of Management specialized in Accounting</strong> from the University of Auckland. This gives her a sophisticated understanding of business operations and financial logic. 🎓",
+            "She completed her Master of Management at UoA, with a specific focus on Accounting. This academic background perfectly complements her technical seniority in Fintech. 🐾"
         ]
     },
     { 
@@ -64,7 +64,11 @@ function getIntent(input) {
     const inputLower = input.toLowerCase().trim();
     const tokens = inputLower.split(/[\s,?.!]+/).filter(t => t.length > 2);
     
-    // Explicit phrase matching for Education to prevent "background" confusion
+    // Catch "Anything else?" and similar follow-ups
+    if (inputLower.includes("anything else") || inputLower.includes("what else") || inputLower.includes("more")) {
+        return 'more';
+    }
+
     if (inputLower.includes("education") || inputLower.includes("degree") || inputLower.includes("study")) {
         return 'edu';
     }
@@ -82,7 +86,6 @@ function getIntent(input) {
             intent.semantics.some(s => t.startsWith(s) && t.length <= s.length + 1)
         ).length;
         
-        // Priority adjustment
         if (intent.id === 'edu') score *= 2.0; 
         if (intent.id === 'tech' || intent.id === 'value') score *= 1.2;
 
@@ -96,6 +99,16 @@ function getIntent(input) {
 
 function getAIResponse(input) {
     const lowerInput = input.toLowerCase().trim();
+
+    // Special handler for follow-up prompts
+    if (getIntent(input) === 'more') {
+        const choices = [
+            "I'd love to tell you more! Did you know Hsiang has a <strong>Master of Management</strong> in addition to her 9+ years of dev experience? 🎓",
+            "Beyond her technical skills, she's an expert in <strong>financial business logic</strong> due to her accounting background. Shall we dive deeper? 💎",
+            "She's also very experienced with <strong>TDD and CI/CD pipelines</strong>, ensuring high-quality delivery. Want to hear more about her FNZ projects? 🚀"
+        ];
+        return choices[Math.floor(Math.random() * choices.length)];
+    }
 
     for (let key in longTermMemory) {
         if (lowerInput.includes(key.toLowerCase())) {
