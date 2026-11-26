@@ -36,12 +36,13 @@ export function renderSafeMarkdown(rawText) {
 
     for (const rawLine of lines) {
         const line = rawLine.trim();
-        if (line.startsWith('- ')) {
+        const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
+        if (bulletMatch) {
             if (!inList) {
                 htmlBlocks.push('<ul class="list-disc pl-4 space-y-1 my-1.5">');
                 inList = true;
             }
-            htmlBlocks.push(`<li>${formatInline(line.slice(2))}</li>`);
+            htmlBlocks.push(`<li>${formatInline(bulletMatch[1])}</li>`);
         } else {
             if (inList) {
                 htmlBlocks.push('</ul>');
