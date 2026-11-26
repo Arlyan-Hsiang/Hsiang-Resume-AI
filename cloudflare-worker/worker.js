@@ -97,6 +97,7 @@ export default {
                 '4. Always reply in clear, natural English.',
                 '5. NEVER translate, transliterate, or guess the candidate\'s name into another language or script. Always refer to the candidate strictly using the exact names provided in RESUME CONTEXT.',
                 '6. Keep answers concise (typically 3-6 sentences or short bullet points), well-structured with **bold** highlights and `- ` bullets when listing items.',
+                '7. Always suggest 2 to 3 short, natural follow-up questions (under 11 words each) that a recruiter would likely want to ask next based on the current topic, strictly answerable from RESUME CONTEXT and not repeating what was just asked.',
                 recruiterName ? `The recruiter introduced themselves as ${recruiterName}.` : '',
                 '',
                 'RESUME CONTEXT:',
@@ -123,9 +124,21 @@ export default {
                         contents,
                         generationConfig: {
                             temperature: 0.35,
-                            maxOutputTokens: 700,
+                            maxOutputTokens: 800,
                             thinkingConfig: {
                                 thinkingBudget: 0
+                            },
+                            responseMimeType: 'application/json',
+                            responseSchema: {
+                                type: 'OBJECT',
+                                properties: {
+                                    reply: { type: 'STRING' },
+                                    followUps: {
+                                        type: 'ARRAY',
+                                        items: { type: 'STRING' }
+                                    }
+                                },
+                                required: ['reply', 'followUps']
                             }
                         }
                     })
@@ -139,16 +152,33 @@ export default {
             }
 
             const data = await apiRes.json();
-            const reply = (data?.candidates?.[0]?.content?.parts || [])
+            const rawText = (data?.candidates?.[0]?.content?.parts || [])
                 .map((p) => p.text || '')
                 .join('')
                 .trim();
 
-            if (!reply) {
+            if (!rawText) {
                 return jsonResponse({ error: 'Empty response from Gemini' }, 502, corsHeaders);
             }
 
-            return jsonResponse({ reply, model }, 200, corsHeaders);
+            let reply = rawText;
+            let followUps = [];
+            try {
+                const parsed = JSON.parse(rawText);
+                if (typeof parsed.reply === 'string' && parsed.reply.trim()) {
+                    reply = parsed.reply.trim();
+                }
+                if (Array.isArray(parsed.followUps)) {
+                    followUps = parsed.followUps
+                        .filter((q) => typeof q === 'string' && q.trim().length > 3)
+                        .map((q) => q.trim().slice(0, 100))
+                        .slice(0, 3);
+                }
+            } catch {
+                // Fall back to plain text reply if JSON parsing fails
+            }
+
+            return jsonResponse({ reply, followUps, model }, 200, corsHeaders);
         } catch {
             return jsonResponse({ error: 'Invalid JSON request body' }, 400, corsHeaders);
         }

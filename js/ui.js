@@ -178,7 +178,7 @@ export class ChatUI {
         this.scrollToBottom();
     }
 
-    addAssistantMessage(markdownText) {
+    addAssistantMessage(markdownText, followUps = [], onFollowUp = null) {
         const row = document.createElement('div');
         row.className = 'flex items-start space-x-3 animate-fade-in';
 
@@ -189,6 +189,29 @@ export class ChatUI {
         const bubble = document.createElement('div');
         bubble.className = 'bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700';
         bubble.innerHTML = renderSafeMarkdown(markdownText);
+
+        if (Array.isArray(followUps) && followUps.length > 0 && typeof onFollowUp === 'function') {
+            const footer = document.createElement('div');
+            footer.className = 'mt-3 pt-2.5 border-t border-slate-100 space-y-1.5';
+
+            const label = document.createElement('p');
+            label.className = 'text-[10px] font-semibold uppercase tracking-wider text-slate-400';
+            label.textContent = 'Ask next';
+            footer.appendChild(label);
+
+            const chipList = document.createElement('div');
+            chipList.className = 'flex flex-col items-start gap-1.5';
+            for (const question of followUps) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-left text-xs font-medium px-3 py-1.5 rounded-xl bg-slate-50 text-[#004a99] border border-[#004a99]/20 hover:bg-[#004a99] hover:text-white transition-colors cursor-pointer flex items-center gap-1.5';
+                btn.innerHTML = `<span class="opacity-70">↳</span><span>${escapeHtml(question)}</span>`;
+                btn.addEventListener('click', () => onFollowUp(question));
+                chipList.appendChild(btn);
+            }
+            footer.appendChild(chipList);
+            bubble.appendChild(footer);
+        }
 
         row.appendChild(avatar);
         row.appendChild(bubble);

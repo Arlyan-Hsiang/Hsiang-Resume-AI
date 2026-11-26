@@ -41,7 +41,7 @@ async function bootstrap() {
                 if (result.mode === 'llm' || result.mode === 'fallback') {
                     ui.setEngineMode(result.mode);
                 }
-                ui.addAssistantMessage(result.text);
+                ui.addAssistantMessage(result.text, result.followUps, handleQuery);
             } catch (err) {
                 console.error('Reply error:', err);
                 ui.hideTyping();

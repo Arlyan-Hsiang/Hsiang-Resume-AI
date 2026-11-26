@@ -88,7 +88,11 @@ export class ResponseEngine {
             const reply = this._personalize(conversationalFaq.answer);
             this.memory.addTurn('user', input);
             this.memory.addTurn('assistant', reply, [conversationalFaq.id]);
-            return { text: reply, mode: 'local', sources: [conversationalFaq.title] };
+            return {
+                text: reply,
+                mode: 'local',
+                followUps: this._suggestLocalFollowUps('faq', [conversationalFaq.id])
+            };
         }
 
         // 5. Contextual follow-up ("tell me more", "anything else?")
@@ -99,12 +103,20 @@ export class ResponseEngine {
                 const reply = `Here is another highlight from ${candidateName}'s profile:\n\n${this._formatDocument(nextDoc)}`;
                 this.memory.addTurn('user', input);
                 this.memory.addTurn('assistant', reply, [nextDoc.id]);
-                return { text: reply, mode: 'local', sources: [nextDoc.title] };
+                return {
+                    text: reply,
+                    mode: 'local',
+                    followUps: this._suggestLocalFollowUps(nextDoc.type, [nextDoc.id])
+                };
             }
             const reply = `We've covered the main highlights of ${candidateName}'s resume! You can ask about a specific company, technology, project, or open the **Resume View** in the top-right corner to browse everything at once.`;
             this.memory.addTurn('user', input);
             this.memory.addTurn('assistant', reply);
-            return { text: reply, mode: 'local', sources: [] };
+            return {
+                text: reply,
+                mode: 'local',
+                followUps: this._suggestLocalFollowUps('summary', [])
+            };
         }
 
         // 6. Retrieve relevant resume documents via BM25/RAG
@@ -117,15 +129,18 @@ export class ResponseEngine {
             const contextDocs = broadSection
                 ? this.kb.getByType(broadSection).map((doc) => ({ doc, score: 1 }))
                 : searchHits;
-            const llmReply = await this._tryLlmProxy(input, contextDocs);
-            if (llmReply) {
+            const llmResult = await this._tryLlmProxy(input, contextDocs);
+            if (llmResult && llmResult.reply) {
                 const docIds = contextDocs.map((item) => item.doc.id);
                 this.memory.addTurn('user', input);
-                this.memory.addTurn('assistant', llmReply, docIds);
+                this.memory.addTurn('assistant', llmResult.reply, docIds);
+                const followUps = llmResult.followUps?.length
+                    ? llmResult.followUps
+                    : this._suggestLocalFollowUps(contextDocs[0]?.doc?.type || 'summary', docIds);
                 return {
-                    text: llmReply,
+                    text: llmResult.reply,
                     mode: 'llm',
-                    sources: contextDocs.slice(0, 3).map((item) => item.doc.title)
+                    followUps
                 };
             }
             usedFallback = true;
@@ -138,9 +153,14 @@ export class ResponseEngine {
             const sectionDocs = this.kb.getByType(broadSection);
             if (sectionDocs.length > 0) {
                 const reply = this._personalize(this._formatSection(broadSection, sectionDocs));
+                const ids = sectionDocs.map((d) => d.id);
                 this.memory.addTurn('user', input);
-                this.memory.addTurn('assistant', reply, sectionDocs.map((d) => d.id));
-                return { text: reply, mode: usedFallback ? 'fallback' : 'local', sources: [this._sectionLabel(broadSection)] };
+                this.memory.addTurn('assistant', reply, ids);
+                return {
+                    text: reply,
+                    mode: usedFallback ? 'fallback' : 'local',
+                    followUps: this._suggestLocalFollowUps(broadSection, ids)
+                };
             }
         }
 
@@ -149,12 +169,13 @@ export class ResponseEngine {
             const strongHits = searchHits.filter((h, idx) => idx === 0 || h.score >= topScore * 0.58).slice(0, 2);
             const parts = strongHits.map((h) => this._formatDocument(h.doc));
             const reply = this._personalize(parts.join('\n\n'));
+            const ids = strongHits.map((h) => h.doc.id);
             this.memory.addTurn('user', input);
-            this.memory.addTurn('assistant', reply, strongHits.map((h) => h.doc.id));
+            this.memory.addTurn('assistant', reply, ids);
             return {
                 text: reply,
                 mode: usedFallback ? 'fallback' : 'local',
-                sources: strongHits.map((h) => h.doc.title)
+                followUps: this._suggestLocalFollowUps(strongHits[0].doc.type, ids)
             };
         }
 
@@ -165,7 +186,11 @@ export class ResponseEngine {
         );
         this.memory.addTurn('user', input);
         this.memory.addTurn('assistant', fallback);
-        return { text: fallback, mode: usedFallback ? 'fallback' : 'local', sources: [] };
+        return {
+            text: fallback,
+            mode: usedFallback ? 'fallback' : 'local',
+            followUps: this._suggestLocalFollowUps('fallback', [])
+        };
     }
 
     async _tryLlmProxy(query, matchedDocs) {
@@ -191,12 +216,62 @@ export class ResponseEngine {
             }
             if (!response.ok) return null;
             const payload = await response.json();
-            return typeof payload.reply === 'string' && payload.reply.trim() ? payload.reply.trim() : null;
+            if (typeof payload.reply !== 'string' || !payload.reply.trim()) return null;
+            return {
+                reply: payload.reply.trim(),
+                followUps: Array.isArray(payload.followUps) ? payload.followUps : []
+            };
         } catch {
             return null;
         } finally {
             clearTimeout(timer);
         }
+    }
+
+    /**
+     * Dynamically derives 2-3 context-aware follow-up questions directly from resume.json
+     * when running in local/fallback mode (zero hardcoded candidate facts).
+     */
+    _suggestLocalFollowUps(currentType, discussedIds = []) {
+        const d = this.kb.data;
+        const candidates = [];
+
+        if (currentType === 'experience') {
+            const firstRole = (d.experience || []).find((r) => !discussedIds.includes(r.id)) || (d.experience || [])[0];
+            if (firstRole?.company) {
+                candidates.push(`Tell me more about the role at ${firstRole.company}`);
+            }
+            if ((d.projects || []).length) candidates.push(`Tell me about ${d.projects[0].title}`);
+            if ((d.skills || []).length) candidates.push('What is the core technical stack?');
+        } else if (currentType === 'narrative') {
+            for (const n of d.narrative || []) {
+                if (!discussedIds.includes(n.id)) candidates.push(`Tell me about: ${n.title}`);
+            }
+            if ((d.projects || []).length) candidates.push('What AI and automation projects have been built?');
+            if ((d.education || []).length) candidates.push('What is the educational background?');
+        } else if (currentType === 'project') {
+            if ((d.narrative || []).length) candidates.push(`Tell me about: ${d.narrative[0].title}`);
+            if ((d.experience || []).length) candidates.push('Walk me through the work history');
+            if ((d.skills || []).length) candidates.push('What is the core technical stack?');
+        } else if (currentType === 'education') {
+            if ((d.narrative || []).length) candidates.push(`Tell me about: ${d.narrative[0].title}`);
+            if ((d.projects || []).length) candidates.push('What technical projects have been built?');
+            if ((d.experience || []).length) candidates.push('Tell me about the work experience');
+        } else if (currentType === 'skills') {
+            if ((d.experience || []).length) candidates.push('How were these skills applied in past roles?');
+            if ((d.projects || []).length) candidates.push('What recent technical projects showcase these skills?');
+            if (d.candidate?.links) candidates.push('How can I get in touch?');
+        }
+
+        // Fill up to 3 from resume.json suggestedPrompts
+        for (const p of d.assistant?.suggestedPrompts || []) {
+            if (candidates.length >= 3) break;
+            if (p.query && !candidates.includes(p.query)) {
+                candidates.push(p.query);
+            }
+        }
+
+        return [...new Set(candidates)].slice(0, 3);
     }
 
     _personalize(text) {
