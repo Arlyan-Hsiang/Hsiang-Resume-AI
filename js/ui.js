@@ -295,7 +295,7 @@ export class ChatUI {
         this.els.resumeModalContent.innerHTML = `
             <div class="space-y-5">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">${escapeHtml(c.name || '')}</h3>
+                    <h3 class="text-lg font-bold text-slate-900">${escapeHtml(c.name || '')}${c.alternateName ? ` <span class="text-sm font-normal text-slate-500">(${escapeHtml(c.alternateName)})</span>` : ''}</h3>
                     <p class="text-xs font-semibold text-[#004a99] mt-0.5">${escapeHtml(c.headline || c.title || '')}</p>
                     <p class="text-xs text-slate-500 mt-0.5">${escapeHtml(c.location || '')}</p>
                     <div class="flex flex-wrap gap-2 mt-2.5">${linksHtml}</div>

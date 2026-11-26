@@ -253,7 +253,8 @@ export class ResponseEngine {
         const p = doc.payload;
 
         if (doc.type === 'summary') {
-            return `**${p.name}** — *${p.title}* (${p.location})\n\n${p.summary}`;
+            const alt = p.alternateName ? ` (${p.alternateName})` : '';
+            return `**${p.name}${alt}** — *${p.title}* (${p.location})\n\n${p.summary}`;
         }
 
         if (doc.type === 'value') {

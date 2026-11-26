@@ -107,8 +107,8 @@ export class ResumeKnowledgeBase {
                 id: 'profile-summary',
                 type: 'summary',
                 title: `${c.name || 'Candidate'} — Profile Summary`,
-                searchText: [c.name, c.shortName, c.title, c.headline, c.location, c.summary].join(' '),
-                tags: ['profile', 'summary', 'about', 'bio', 'overview', 'who', 'introduction', 'background'],
+                searchText: [c.name, c.shortName, c.alternateName, c.title, c.headline, c.location, c.summary].filter(Boolean).join(' '),
+                tags: ['profile', 'summary', 'about', 'bio', 'overview', 'who', 'introduction', 'background', 'name', ...(c.alternateName ? tokenize(c.alternateName) : [])],
                 payload: c
             });
         }
@@ -425,7 +425,7 @@ export class ResumeKnowledgeBase {
         const d = this.data;
         const c = d.candidate || {};
         const sections = [
-            `CANDIDATE: ${c.name || ''} | ${c.title || ''} | ${c.location || ''} | ${c.yearsExperience || ''} yrs exp`,
+            `CANDIDATE: ${c.name || ''}${c.alternateName ? ` (also known as ${c.alternateName})` : ''} | ${c.title || ''} | ${c.location || ''} | ${c.yearsExperience || ''} yrs exp`,
             `HEADLINE: ${c.headline || ''}`,
             `SUMMARY: ${c.summary || ''}`,
             `VALUE PROPOSITION: ${c.valueProposition || ''}`,
