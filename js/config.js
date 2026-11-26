@@ -10,7 +10,7 @@
  */
 export const APP_CONFIG = {
     resumeDataUrl: './data/resume.json',
-    llmProxyUrl: '',
+    llmProxyUrl: 'https://hsiang-resume-ai-proxy.htse856.workers.dev',
     llmTimeoutMs: 12000,
     topKChunks: 4,
     typingDelayMs: 320,
