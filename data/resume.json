@@ -33,8 +33,8 @@
     "headline": "Senior Software Engineer | C# & .NET | Enterprise Fintech & Applied AI Architecture",
     "location": "Auckland, New Zealand",
     "yearsExperience": "8+",
-    "summary": "Senior Software Developer with 8+ years of software engineering experience across enterprise financial platforms and core banking migrations, paired with a Master of Management (Accounting) and a Master of Artificial Intelligence (in progress) at the University of Auckland. Experienced in translating complex financial and operational requirements into reliable backend systems (C#/.NET, SQL Server, React) and building cloud-native multi-agent AI architectures on Azure (MCP, Azure OpenAI, PostgreSQL/pgvector).",
-    "valueProposition": "Hsiang combines 8+ years of enterprise software engineering in financial platforms (FNZ, Cybersoft, PSA), a Master of Management in Accounting, and hands-on Master of Artificial Intelligence architecture work (Azure OpenAI hybrid model tiering, MCP tool sandboxing, pgvector RAG, Cloudflare Edge KV caching) — bridging complex business/financial logic with practical, production-ready internal AI adoption.",
+    "summary": "Senior Software Developer with 8+ years of software engineering experience across enterprise financial platforms and core banking migrations, paired with a Master of Management (Accounting) and a Postgraduate Certificate in Artificial Intelligence (in progress) at the University of Auckland. Experienced in translating complex financial and operational requirements into reliable backend systems (C#/.NET, SQL Server, React) and building cloud-native multi-agent AI architectures on Azure (MCP, Azure OpenAI, PostgreSQL/pgvector).",
+    "valueProposition": "Hsiang combines 8+ years of enterprise software engineering in financial platforms (FNZ, Cybersoft, PSA), a Master of Management in Accounting, and hands-on Postgraduate Certificate in Artificial Intelligence architecture work (Azure OpenAI hybrid model tiering, MCP tool sandboxing, pgvector RAG, Cloudflare Edge KV caching) — bridging complex business/financial logic with practical, production-ready internal AI adoption.",
     "links": {
       "email": "htse856@aucklanduni.ac.nz",
       "linkedin": "https://www.linkedin.com/in/tseng-hsiangtzu/",
@@ -148,8 +148,8 @@
   ],
   "education": [
     {
-      "id": "edu-mai",
-      "degree": "Master of Artificial Intelligence",
+      "id": "edu-pgcert-ai",
+      "degree": "Postgraduate Certificate in Artificial Intelligence",
       "specialization": "Artificial Intelligence",
       "institution": "The University of Auckland",
       "location": "Auckland, New Zealand",
@@ -158,7 +158,7 @@
       "notes": [
         "In progress — postgraduate study in AI architecture, multi-agent systems, and applied machine learning alongside senior software engineering work."
       ],
-      "tags": ["education", "master", "ai", "artificial intelligence", "uoa", "auckland", "university", "current"]
+      "tags": ["education", "postgraduate", "certificate", "pgcert", "ai", "artificial intelligence", "uoa", "auckland", "university", "current"]
     },
     {
       "id": "edu-mmgt",
@@ -226,7 +226,7 @@
       "summary": "Hsiang views AI as a generational inflection point comparable to the dawn of personal computing — a foundational shift that will inevitably reshape every industry and workflow.",
       "details": [
         "She sees today's AI transition as comparable to when computers were first introduced to the world: it is not a temporary trend, and organizations and engineers will inevitably need to build with it.",
-        "Rather than remaining a passive consumer of AI tools, she enrolled in the Master of Artificial Intelligence at the University of Auckland to build rigorous theoretical foundations alongside her 8+ years of production software engineering.",
+        "Rather than remaining a passive consumer of AI tools, she enrolled in the Postgraduate Certificate in Artificial Intelligence at the University of Auckland to build rigorous theoretical foundations alongside her 8+ years of production software engineering.",
         "She pairs formal study with hands-on systems engineering — building cloud-native multi-agent Azure/MCP systems (Zava DIY AI Assistant) and edge-cached LLM applications (this interactive resume app)."
       ],
       "tags": ["why", "study", "studying", "ai", "artificial intelligence", "motivation", "reason", "master", "future", "trend", "computer", "pivot", "learning"]
@@ -238,7 +238,7 @@
       "details": [
         "Her long-term goal is to apply and evolve internal AI technology tailored to each company's real operations — integrating AI smoothly into existing enterprise workflows and backend systems rather than building isolated prototypes.",
         "Many enterprise AI initiatives stall between proof-of-concept and everyday adoption due to legacy integration, data integrity, security, and reliability challenges — the exact problems she has solved across core banking migrations and large-scale fintech systems.",
-        "Combining senior C#/.NET backend engineering, a Master of Management in Accounting, and a Master of Artificial Intelligence positions her to bridge real business goals with practical, reliable internal AI adoption."
+        "Combining senior C#/.NET backend engineering, a Master of Management in Accounting, and a Postgraduate Certificate in Artificial Intelligence positions her to bridge real business goals with practical, reliable internal AI adoption."
       ],
       "tags": ["goal", "goals", "vision", "long term", "long-term", "future", "career", "enterprise", "internal", "ai", "companies", "adoption", "next role", "looking for", "ambition", "direction"]
     },
