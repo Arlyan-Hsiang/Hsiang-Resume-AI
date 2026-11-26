@@ -2,95 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hsiang Tzu Tseng - AI Resume Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Resume Assistant</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6;
-            height: 100vh;
-            height: -webkit-fill-available;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        html { height: -webkit-fill-available; }
-        .chat-container { 
-            flex: 1;
-            overflow-y: auto; 
-            scrollbar-width: thin;
-            -webkit-overflow-scrolling: touch;
-        }
-        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .cat-avatar { 
-            width: 44px; 
-            height: 44px; 
-            background-color: #004a99; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            overflow: hidden; 
-            border: 2px solid white; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-            flex-shrink: 0;
-            color: white;
-            font-size: 24px;
-        }
-        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        @media (max-width: 640px) {
-            .main-card { height: 100%; border-radius: 0; max-width: 100%; }
-            .chat-container { padding: 1rem; }
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-100">
 
-    <div class="main-card flex flex-col max-w-2xl w-full mx-auto bg-white sm:rounded-3xl shadow-2xl overflow-hidden glass-effect border-x border-slate-200 sm:my-4 sm:h-[90vh]">
-        
-        <div class="bg-[#004a99] p-4 sm:p-6 text-white flex items-center justify-between shadow-md z-10">
-            <div class="flex items-center space-x-3 sm:space-x-4">
-                <div class="text-2xl sm:text-3xl">🐱💎</div>
-                <div>
-                    <h1 class="text-lg sm:text-xl font-bold">Hsiang Tzu Tseng (Ruby)</h1>
-                    <p class="text-[10px] sm:text-sm opacity-80 uppercase tracking-wider font-semibold">AI Resume Assistant</p>
+    <main class="main-card flex flex-col max-w-2xl w-full mx-auto bg-white sm:rounded-3xl shadow-2xl overflow-hidden glass-effect border-x border-slate-200 sm:my-4 sm:h-[92vh]">
+        <!-- Header -->
+        <header class="bg-[var(--brand-primary)] p-4 sm:px-6 sm:py-5 text-white flex items-center justify-between shadow-md z-10">
+            <div class="flex items-center space-x-3 sm:space-x-4 min-w-0">
+                <div id="header-avatar" class="w-11 h-11 rounded-full bg-white/15 border-2 border-white/80 flex items-center justify-center overflow-hidden shrink-0 text-xl">
+                    🐱
+                </div>
+                <div class="min-w-0">
+                    <h1 id="header-title" class="text-base sm:text-lg font-bold truncate">Loading...</h1>
+                    <p id="header-subtitle" class="text-[11px] sm:text-xs opacity-85 uppercase tracking-wider font-semibold truncate">Interactive Resume Assistant</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                <span class="text-[10px] sm:text-xs font-medium uppercase opacity-90">Live</span>
-            </div>
-        </div>
-
-        <div id="chat-window" class="chat-container p-4 space-y-4 bg-slate-50/50">
-            <div class="flex items-start space-x-3">
-                <div class="cat-avatar">🐱</div>
-                <div id="welcome-msg" class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700 leading-relaxed">
-                    Hi there! I'm Ruby, Hsiang Tzu's digital cat assistant. 🐱✨<br><br>
-                    I'm currently powered by a <strong>Smart Semantic Matcher</strong>. You can ask me anything about Hsiang's expertise, value, or background in natural language!
+            <div class="flex items-center space-x-2 shrink-0">
+                <button id="open-resume-btn" type="button" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors flex items-center space-x-1.5">
+                    <i class="fas fa-file-alt text-[11px]"></i>
+                    <span>Resume</span>
+                </button>
+                <div class="hidden sm:flex items-center space-x-1.5 pl-1">
+                    <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                    <span class="text-[11px] font-medium uppercase opacity-90">Live</span>
                 </div>
             </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <section id="chat-window" aria-live="polite" class="chat-container p-4 space-y-4 bg-slate-50/60">
+            <div class="text-center text-xs text-slate-400 py-8">Loading resume knowledge base...</div>
+        </section>
+
+        <!-- Quick Suggested Prompts (Populated dynamically from data/resume.json) -->
+        <div class="px-4 pt-2.5 pb-1 bg-white border-t border-slate-100">
+            <div id="suggestion-bar" class="suggestion-scroll flex items-center space-x-2 overflow-x-auto pb-1"></div>
         </div>
 
-        <div class="p-4 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)]">
+        <!-- Input Bar -->
+        <footer class="px-4 pb-4 pt-2 bg-white">
             <div class="flex items-center space-x-2">
-                <input type="text" id="user-input-field" placeholder="Type a message..." class="flex-1 bg-slate-100 border-none rounded-full px-5 py-3 text-sm focus:ring-2 focus:ring-[#004a99] transition-all outline-none">
-                <button onclick="handleSend()" class="bg-[#004a99] text-white p-3 rounded-full hover:bg-[#003366] transition-transform active:scale-95 shadow-lg">
-                    <i class="fas fa-paper-plane"></i>
+                <input
+                    type="text"
+                    id="user-input-field"
+                    placeholder="Ask a question about this resume..."
+                    autocomplete="off"
+                    class="flex-1 bg-slate-100 border border-transparent focus:border-[var(--brand-primary)]/40 rounded-full px-5 py-3 text-sm focus:ring-2 focus:ring-[var(--brand-primary)]/20 transition-all outline-none"
+                >
+                <button
+                    id="send-btn"
+                    type="button"
+                    aria-label="Send message"
+                    class="bg-[var(--brand-primary)] text-white w-11 h-11 rounded-full hover:bg-[var(--brand-primary-dark)] transition-transform active:scale-95 shadow-md flex items-center justify-center shrink-0"
+                >
+                    <i class="fas fa-paper-plane text-sm"></i>
                 </button>
             </div>
-            <div class="flex justify-between items-center mt-3 px-2">
-                <p class="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Semantic Brain Active 🧠💎</p>
-                <button onclick="clearMemory()" class="text-[9px] text-slate-400 hover:text-red-400 transition-colors uppercase font-bold">Reset Experience</button>
+            <div class="flex justify-between items-center mt-2.5 px-2">
+                <p id="engine-badge" class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Dynamic Resume RAG Active</p>
+                <button id="reset-btn" type="button" class="text-[10px] text-slate-400 hover:text-red-500 transition-colors uppercase font-semibold">Reset Chat</button>
             </div>
+        </footer>
+    </main>
+
+    <!-- Structured Resume Quick-View Modal (Rendered dynamically from data/resume.json) -->
+    <div id="resume-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Resume Summary">
+        <div class="bg-white w-full max-w-xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in">
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Structured Resume View</span>
+                <button id="close-resume-btn" type="button" aria-label="Close resume view" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full hover:bg-slate-200/70 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="resume-modal-content" class="p-5 overflow-y-auto"></div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="./js/main.js"></script>
 </body>
 </html>

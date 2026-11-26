@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "1.0.0",
+  "assistant": {
+    "name": "Ruby",
+    "displayName": "Hsiang Tzu Tseng",
+    "subtitle": "Interactive Resume Assistant",
+    "avatar": "./ruby_cat_avatar.png",
+    "fallbackEmoji": "🐱",
+    "theme": {
+      "primary": "#004a99",
+      "primaryDark": "#003366",
+      "accent": "#0ea5e9"
+    },
+    "greeting": "Hi there! I'm **Ruby**, Hsiang Tzu's digital cat assistant. Ask me anything about Hsiang's experience, technical stack, AI projects, education, or how to get in touch.",
+    "returningGreeting": "Welcome back, **{name}**! I'm Ruby, ready to continue exploring Hsiang's background and technical expertise. What would you like to know?",
+    "inputPlaceholder": "Ask about experience, C#/.NET, AI projects, education...",
+    "fallbackMessage": "I couldn't find an exact match for that in Hsiang's resume data. Try asking about her **work history**, **tech stack**, **AI & automation projects**, **education**, or **contact details** — or click one of the quick topics below!",
+    "suggestedPrompts": [
+      { "label": "Work History", "query": "Tell me about Hsiang's work experience" },
+      { "label": "Tech Stack", "query": "What is her technical stack and core skills?" },
+      { "label": "AI & Automation", "query": "Tell me about her AI and workflow automation projects" },
+      { "label": "Education", "query": "What is her educational background?" },
+      { "label": "Why Hire Her?", "query": "What unique value does Hsiang bring?" },
+      { "label": "Contact", "query": "How can I contact Hsiang?" }
+    ]
+  },
+  "candidate": {
+    "name": "Hsiang Tzu Tseng",
+    "shortName": "Hsiang",
+    "title": "Senior Analyst Developer",
+    "headline": "Senior Software Engineer | C# & .NET | Financial Platforms, Workflow Automation & AI",
+    "location": "Auckland, New Zealand",
+    "yearsExperience": "9+",
+    "summary": "Software Developer with a unique blend of Senior Software Engineering and Financial/Accounting background, currently pursuing a Master of Artificial Intelligence at the University of Auckland. Expert at translating complex business requirements into robust technical solutions for large-scale financial platforms, managing stakeholder expectations, and leading technical initiatives that enhance system performance and team productivity.",
+    "valueProposition": "Hsiang brings a rare intersection of 9+ years of senior backend engineering (C#/.NET, SQL Server, React), a Master of Management in Accounting, and ongoing Master of Artificial Intelligence studies — allowing her to bridge complex financial domain logic, enterprise software reliability, and modern AI/workflow automation.",
+    "links": {
+      "email": "htse856@aucklanduni.ac.nz",
+      "linkedin": "https://www.linkedin.com/in/tseng-hsiangtzu/",
+      "github": "https://github.com/Arlyan-Hsiang",
+      "portfolio": "https://arlyan-hsiang.github.io/Hsiang-Resume-AI/"
+    },
+    "references": "Available upon request"
+  },
+  "experience": [
+    {
+      "id": "exp-fnz-senior",
+      "title": "Senior Analyst Developer",
+      "company": "FNZ",
+      "location": "Auckland, NZ",
+      "period": "2025-04 – Current",
+      "current": true,
+      "domain": "Fintech / Wealth Management Platform",
+      "summary": "Leading technical guidance, CI/CD automation, and code quality standards for enterprise wealth-management software in Auckland.",
+      "highlights": [
+        "Provide technical guidance and mentorship to team members, ensuring project milestones are met with high-quality deliverables.",
+        "Integrate TeamCity CI/CD to streamline the development and deployment process.",
+        "Maintain code review processes to enforce coding standards, improve system maintainability, and ensure security best practices across the platform."
+      ],
+      "technologies": ["C#", ".NET Core", "ASP.NET MVC", "MSSQL", "TeamCity", "CI/CD", "Git", "Code Review", "Security Best Practices"],
+      "clients": [],
+      "tags": ["current", "leadership", "mentorship", "senior", "fnz", "auckland", "fintech", "cicd", "teamcity", "security"]
+    },
+    {
+      "id": "exp-fnz-analyst",
+      "title": "Analyst Developer",
+      "company": "FNZ",
+      "location": "Wellington, NZ",
+      "period": "2022-04 – 2025-04",
+      "current": false,
+      "domain": "Fintech / Global Financial Clients",
+      "summary": "Delivered full-stack financial platform solutions and TDD test coverage for major UK/global financial institutions including Monzo, Lloyds, and Vanguard.",
+      "highlights": [
+        "Delivered quality software solutions using C#, ASP.NET MVC, .NET Core, VB.NET, JavaScript, MS SQL, REST APIs, and ReactJS.",
+        "Used Git for source control and Jira for agile project management.",
+        "Worked for major financial clients including Monzo, Lloyds, and Vanguard to deliver reliable technical solutions for their financial platforms.",
+        "Developed and maintained comprehensive unit tests using xUnit to drive TDD practices and ensure platform reliability."
+      ],
+      "technologies": ["C#", "ASP.NET MVC", ".NET Core", "VB.NET", "JavaScript", "MSSQL", "REST APIs", "ReactJS", "xUnit", "TDD", "Git", "Jira"],
+      "clients": ["Monzo", "Lloyds", "Vanguard"],
+      "tags": ["fnz", "wellington", "fintech", "monzo", "lloyds", "vanguard", "tdd", "xunit", "react", "api"]
+    },
+    {
+      "id": "exp-psa",
+      "title": "IT Developer",
+      "company": "Public Service Association (PSA)",
+      "location": "Wellington, NZ",
+      "period": "2021-05 – 2022-04",
+      "current": false,
+      "domain": "Internal Enterprise Systems",
+      "summary": "Built and stabilized internal operational systems in C#.NET, JavaScript, and MSSQL.",
+      "highlights": [
+        "Developed internal operational systems using C#.NET, JavaScript, and MSSQL, ensuring high performance and data integrity.",
+        "Identified and resolved complex system validation issues to ensure consistent program uptime.",
+        "Contributed to the design and planning of next-generation software rollouts."
+      ],
+      "technologies": ["C#", ".NET", "JavaScript", "MSSQL"],
+      "clients": [],
+      "tags": ["psa", "public service association", "wellington", "internal systems", "data integrity", "uptime"]
+    },
+    {
+      "id": "exp-hulucat",
+      "title": "IT Support Technician",
+      "company": "Hulucat International Ltd",
+      "location": "Auckland, NZ",
+      "period": "2019-01 – 2021-04",
+      "current": false,
+      "domain": "Operations & Internal Tooling",
+      "summary": "Built custom C# desktop tools and full-stack web apps for shift management and internal e-learning alongside IT solutions.",
+      "highlights": [
+        "Analyzed technical requirements to design and implement tailored hardware and software solutions.",
+        "Developed custom desktop applications using C# and built full-stack web platforms (PHP, HTML, CSS) for shift management and internal e-learning."
+      ],
+      "technologies": ["C#", "PHP", "HTML", "CSS", "Desktop Applications"],
+      "clients": [],
+      "tags": ["hulucat", "auckland", "php", "e-learning", "shift management", "desktop", "full-stack"]
+    },
+    {
+      "id": "exp-cybersoft",
+      "title": "Software Engineer",
+      "company": "Cybersoft Technology Co., Ltd",
+      "location": "Taipei, Taiwan",
+      "period": "2015-07 – 2018-08",
+      "current": false,
+      "domain": "Core Banking & Digital Payments",
+      "summary": "Migrated core banking systems from Mainframe to .NET and implemented Apple Pay and Google Pay payment modules.",
+      "highlights": [
+        "Migrated core banking systems from Mainframe to .NET using C#, JavaScript, and MSSQL.",
+        "Developed and implemented payment integration modules for Apple Pay and Google Pay."
+      ],
+      "technologies": ["C#", ".NET", "JavaScript", "MSSQL", "Mainframe Migration", "Apple Pay", "Google Pay"],
+      "clients": [],
+      "tags": ["cybersoft", "taipei", "taiwan", "banking", "mainframe", "migration", "payments", "apple pay", "google pay"]
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-ai-automation",
+      "title": "Self-Hosted Workflow Automation & AI Agent Architecture",
+      "period": "2025-11 – Current",
+      "current": true,
+      "summary": "Scalable containerized AI agent and workflow automation platform built with n8n, OpenClaw, Docker, Redis, and PostgreSQL.",
+      "highlights": [
+        "Designed and deployed a scalable automation platform using n8n and OpenClaw entirely within Docker environments.",
+        "Implemented a distributed n8n architecture using Redis to execute high-frequency API polling and asynchronous resource management across multiple worker nodes.",
+        "Configured and managed persistent data storage using containerized PostgreSQL instances.",
+        "Developed custom automated workflows to integrate external APIs and AI agents, demonstrating strong problem-solving and system integration skills."
+      ],
+      "technologies": ["n8n", "OpenClaw", "Docker", "Redis", "PostgreSQL", "AI Agents", "REST APIs", "Distributed Systems"],
+      "tags": ["project", "ai", "agent", "automation", "workflow", "n8n", "openclaw", "docker", "redis", "postgres", "postgresql", "self-hosted"]
+    },
+    {
+      "id": "proj-resume-ai",
+      "title": "Interactive AI Resume Assistant (Ruby)",
+      "period": "2026 – Current",
+      "current": true,
+      "summary": "Data-driven interactive resume assistant deployed statically on GitHub Pages with client-side BM25 retrieval and optional serverless LLM integration.",
+      "highlights": [
+        "Decoupled all candidate data into a structured JSON knowledge base with zero hardcoded resume logic.",
+        "Built a modular browser-native ES module architecture featuring BM25 ranking, synonym expansion, fuzzy matching, and optional LLM proxy support.",
+        "Designed with XSS-safe DOM rendering and an interactive resume quick-view drawer."
+      ],
+      "technologies": ["JavaScript (ES Modules)", "HTML5", "Tailwind CSS", "BM25 Search", "GitHub Pages", "Cloudflare Workers"],
+      "tags": ["project", "portfolio", "resume", "chatbot", "rag", "github pages", "ruby"]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-mai",
+      "degree": "Master of Artificial Intelligence",
+      "specialization": "Artificial Intelligence",
+      "institution": "The University of Auckland",
+      "location": "Auckland, New Zealand",
+      "period": "2026-07 – Current",
+      "current": true,
+      "notes": [
+        "Currently pursuing postgraduate study in Artificial Intelligence alongside senior software engineering work."
+      ],
+      "tags": ["education", "master", "ai", "artificial intelligence", "uoa", "auckland", "university", "current"]
+    },
+    {
+      "id": "edu-mmgt",
+      "degree": "Master of Management",
+      "specialization": "Accounting",
+      "institution": "The University of Auckland",
+      "location": "Auckland, New Zealand",
+      "period": "2018-09 – 2019-12",
+      "current": false,
+      "notes": [
+        "Specialized in Accounting, providing deep understanding of business operations, financial reporting, and domain logic for fintech platforms."
+      ],
+      "tags": ["education", "master", "management", "accounting", "finance", "uoa", "auckland", "university"]
+    },
+    {
+      "id": "edu-ba",
+      "degree": "Bachelor of Arts in Information Management and Literature",
+      "specialization": "Minor in Information Management",
+      "institution": "National Chi Nan University",
+      "location": "Taiwan",
+      "period": "2011-09 – 2015-06",
+      "current": false,
+      "notes": [
+        "Combined communication and analytical foundations with a Minor in Information Management."
+      ],
+      "tags": ["education", "bachelor", "degree", "information management", "taiwan", "university", "ncnu"]
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill-backend",
+      "category": "Backend & Core Languages",
+      "items": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "REST APIs", "JavaScript", "PHP"],
+      "tags": ["backend", "csharp", "c#", "dotnet", ".net", "aspnet", "mvc", "api", "javascript", "php", "languages"]
+    },
+    {
+      "id": "skill-frontend",
+      "category": "Frontend & Web",
+      "items": ["ReactJS", "JavaScript (ES6+)", "HTML5", "CSS3"],
+      "tags": ["frontend", "react", "reactjs", "ui", "web", "html", "css", "javascript"]
+    },
+    {
+      "id": "skill-data",
+      "category": "Databases & Caching",
+      "items": ["MS SQL Server (MSSQL)", "PostgreSQL", "Redis"],
+      "tags": ["database", "db", "sql", "mssql", "postgres", "postgresql", "redis", "data"]
+    },
+    {
+      "id": "skill-devops",
+      "category": "DevOps, Testing & Architecture",
+      "items": ["TeamCity CI/CD", "Docker", "xUnit (TDD)", "Git", "Jira", "Code Review & Security Best Practices", "System Architecture"],
+      "tags": ["devops", "cicd", "ci/cd", "teamcity", "docker", "tdd", "xunit", "testing", "git", "jira", "architecture", "security"]
+    },
+    {
+      "id": "skill-ai",
+      "category": "AI & Workflow Automation",
+      "items": ["AI Agent Integration", "n8n (Distributed Workers)", "OpenClaw", "Workflow Automation", "External API Orchestration"],
+      "tags": ["ai", "agents", "automation", "n8n", "openclaw", "workflow", "llm"]
+    }
+  ],
+  "faqs": [
+    {
+      "id": "faq-greet",
+      "category": "conversational",
+      "title": "Greeting",
+      "keywords": ["hi", "hello", "hey", "yo", "greetings", "good morning", "good afternoon", "ruby"],
+      "answer": "Meow! Hello there — I'm **Ruby**, Hsiang's resume assistant. Ask me about her **work history**, **C#/.NET & AI stack**, **education**, or **projects**, or tell me your name so I can remember it!"
+    },
+    {
+      "id": "faq-status",
+      "category": "conversational",
+      "title": "Assistant Status",
+      "keywords": ["how are you", "how is it going", "how are things", "whats up", "how is your day"],
+      "answer": "Purring along smoothly! I'm always ready to walk you through Hsiang's 9+ years of software engineering experience, fintech background, and AI projects. What would you like to explore?"
+    },
+    {
+      "id": "faq-weather",
+      "category": "conversational",
+      "title": "Auckland Weather",
+      "keywords": ["weather", "sunny", "rain", "climate", "forecast", "temperature"],
+      "answer": "Classic Auckland — four seasons in one day! Luckily, Hsiang's CI/CD pipelines and backend architectures are much more predictable than Auckland clouds."
+    },
+    {
+      "id": "faq-references",
+      "category": "general",
+      "title": "References",
+      "keywords": ["reference", "references", "referee", "referees", "recommendation"],
+      "answer": "Professional references are **available upon request**. Feel free to reach out to Hsiang via email or LinkedIn to arrange them."
+    }
+  ],
+  "synonyms": [
+    ["c#", "csharp", "dotnet", ".net", "asp.net", "aspnet"],
+    ["ai", "artificial intelligence", "ml", "agent", "agents", "llm", "automation", "n8n", "openclaw"],
+    ["education", "degree", "degrees", "university", "master", "masters", "uoa", "study", "studying", "academic", "school", "qualification"],
+    ["experience", "work", "career", "history", "roles", "job", "jobs", "background", "employment", "companies"],
+    ["skills", "skill", "tech", "stack", "technology", "technologies", "languages", "tools", "expertise", "proficient"],
+    ["projects", "project", "built", "build", "portfolio", "initiatives", "side project"],
+    ["value", "hire", "why", "strengths", "unique", "fit", "benefit", "advantage", "stand out"],
+    ["contact", "email", "linkedin", "github", "reach", "connect", "links", "message"],
+    ["database", "databases", "sql", "mssql", "postgresql", "postgres", "redis"],
+    ["testing", "test", "tdd", "xunit", "quality", "ci/cd", "cicd", "devops", "teamcity", "docker"],
+    ["finance", "fintech", "financial", "banking", "accounting", "payments", "monzo", "lloyds", "vanguard"]
+  ]
+}
