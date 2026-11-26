@@ -123,14 +123,19 @@ export default {
                         contents,
                         generationConfig: {
                             temperature: 0.35,
-                            maxOutputTokens: 450
+                            maxOutputTokens: 700,
+                            thinkingConfig: {
+                                thinkingBudget: 0
+                            }
                         }
                     })
                 }
             );
 
             if (!apiRes.ok) {
-                return jsonResponse({ error: 'Upstream Gemini API error', status: apiRes.status }, 502, corsHeaders);
+                const status = apiRes.status === 429 ? 429 : 502;
+                const message = apiRes.status === 429 ? 'Gemini quota or rate limit exceeded' : 'Upstream Gemini API error';
+                return jsonResponse({ error: message, upstreamStatus: apiRes.status }, status, corsHeaders);
             }
 
             const data = await apiRes.json();

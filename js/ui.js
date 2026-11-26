@@ -108,12 +108,21 @@ export class ChatUI {
             this._mountAvatar(this.els.headerAvatar, 'w-11 h-11');
         }
         if (this.els.engineBadge) {
-            this.els.engineBadge.textContent = isLlmEnabled
-                ? 'LLM + Resume RAG Active'
-                : 'Dynamic Resume RAG Active';
+            this.setEngineMode(isLlmEnabled ? 'llm' : 'local');
         }
         if (this.els.input && assistant.inputPlaceholder) {
             this.els.input.placeholder = assistant.inputPlaceholder;
+        }
+    }
+
+    setEngineMode(mode) {
+        if (!this.els.engineBadge) return;
+        if (mode === 'llm') {
+            this.els.engineBadge.textContent = 'LLM + Resume RAG Active';
+        } else if (mode === 'fallback') {
+            this.els.engineBadge.textContent = 'Local Resume RAG (Auto-Fallback)';
+        } else {
+            this.els.engineBadge.textContent = 'Dynamic Resume RAG Active';
         }
     }
 

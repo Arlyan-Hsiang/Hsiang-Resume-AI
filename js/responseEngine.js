@@ -26,10 +26,15 @@ export class ResponseEngine {
         this.kb = knowledgeBase;
         this.memory = memory;
         this.config = config;
+        this.llmCooldownUntil = 0;
     }
 
     isLlmEnabled() {
         return Boolean(this.config.llmProxyUrl && this.config.llmProxyUrl.trim());
+    }
+
+    isLlmInCooldown() {
+        return Date.now() < this.llmCooldownUntil;
     }
 
     async generateReply(rawInput) {
@@ -106,8 +111,9 @@ export class ResponseEngine {
         const broadSection = this.kb.detectBroadSection(input);
         const searchHits = this.kb.search(input, this.config.topKChunks);
 
-        // 7. Optional live LLM proxy synthesis (falls back seamlessly to local RAG on error)
-        if (this.isLlmEnabled()) {
+        // 7. Optional live LLM proxy synthesis (falls back seamlessly to local resume.json RAG on quota/error)
+        let usedFallback = false;
+        if (this.isLlmEnabled() && !this.isLlmInCooldown()) {
             const contextDocs = broadSection
                 ? this.kb.getByType(broadSection).map((doc) => ({ doc, score: 1 }))
                 : searchHits;
@@ -122,6 +128,9 @@ export class ResponseEngine {
                     sources: contextDocs.slice(0, 3).map((item) => item.doc.title)
                 };
             }
+            usedFallback = true;
+        } else if (this.isLlmEnabled() && this.isLlmInCooldown()) {
+            usedFallback = true;
         }
 
         // 8. Local grounded synthesis directly from resume.json
@@ -131,7 +140,7 @@ export class ResponseEngine {
                 const reply = this._personalize(this._formatSection(broadSection, sectionDocs));
                 this.memory.addTurn('user', input);
                 this.memory.addTurn('assistant', reply, sectionDocs.map((d) => d.id));
-                return { text: reply, mode: 'local', sources: [this._sectionLabel(broadSection)] };
+                return { text: reply, mode: usedFallback ? 'fallback' : 'local', sources: [this._sectionLabel(broadSection)] };
             }
         }
 
@@ -144,7 +153,7 @@ export class ResponseEngine {
             this.memory.addTurn('assistant', reply, strongHits.map((h) => h.doc.id));
             return {
                 text: reply,
-                mode: 'local',
+                mode: usedFallback ? 'fallback' : 'local',
                 sources: strongHits.map((h) => h.doc.title)
             };
         }
@@ -156,7 +165,7 @@ export class ResponseEngine {
         );
         this.memory.addTurn('user', input);
         this.memory.addTurn('assistant', fallback);
-        return { text: fallback, mode: 'local', sources: [] };
+        return { text: fallback, mode: usedFallback ? 'fallback' : 'local', sources: [] };
     }
 
     async _tryLlmProxy(query, matchedDocs) {
@@ -175,6 +184,11 @@ export class ResponseEngine {
                     history: this.memory.getRecentMessages().map((m) => ({ role: m.role, text: m.text }))
                 })
             });
+            if (response.status === 429) {
+                // Quota/rate limit hit: switch cleanly to instant local resume.json answers for 5 minutes
+                this.llmCooldownUntil = Date.now() + 5 * 60 * 1000;
+                return null;
+            }
             if (!response.ok) return null;
             const payload = await response.json();
             return typeof payload.reply === 'string' && payload.reply.trim() ? payload.reply.trim() : null;
