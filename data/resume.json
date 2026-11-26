@@ -55,14 +55,14 @@
       "summary": "Promoted from Analyst Developer (Wellington, 2022-04 – 2025-04) to Senior Analyst Developer (Auckland, 2025-04 – Current), building and maintaining large-scale wealth-management platforms for global financial clients including Monzo, Lloyds, and Vanguard.",
       "highlights": [
         "Promoted to Senior Analyst Developer (Apr 2025, Auckland), providing technical guidance and mentorship to team members to support timely, high-quality project deliverables.",
-        "Integrated TeamCity CI/CD pipelines to streamline build, testing, and deployment workflows across enterprise financial environments.",
         "Engineered and maintained full-stack financial platform solutions using C#, .NET Core, ASP.NET MVC, VB.NET, JavaScript, ReactJS, REST APIs, and MS SQL Server.",
         "Delivered production solutions for major UK and global financial institutions including Monzo, Lloyds, and Vanguard.",
-        "Developed and maintained comprehensive xUnit test suites to support TDD practices, system reliability, and secure, maintainable code."
+        "Developed and maintained comprehensive xUnit test suites to support TDD practices and platform reliability.",
+        "Worked within CI/CD build and deployment workflows (GitHub Actions, previously TeamCity) to support reliable enterprise releases."
       ],
-      "technologies": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "JavaScript", "ReactJS", "REST APIs", "MSSQL", "TeamCity CI/CD", "xUnit", "TDD", "Git", "Jira"],
+      "technologies": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "JavaScript", "ReactJS", "REST APIs", "MSSQL", "GitHub Actions", "xUnit", "TDD", "Git", "Jira"],
       "clients": ["Monzo", "Lloyds", "Vanguard"],
-      "tags": ["current", "promotion", "senior", "mentorship", "fnz", "auckland", "wellington", "fintech", "monzo", "lloyds", "vanguard", "cicd", "teamcity", "tdd", "xunit", "react", "api"]
+      "tags": ["current", "promotion", "senior", "mentorship", "fnz", "auckland", "wellington", "fintech", "monzo", "lloyds", "vanguard", "cicd", "github actions", "tdd", "xunit", "react", "api"]
     },
     {
       "id": "exp-psa",
@@ -205,8 +205,8 @@
     {
       "id": "skill-cloud",
       "category": "Cloud, DevOps & Testing",
-      "items": ["Microsoft Azure (App Service, ACR, Bicep, Managed Identity)", "Cloudflare Workers & KV", "Docker", "TeamCity CI/CD", "xUnit (TDD)", "Git", "Jira"],
-      "tags": ["cloud", "azure", "bicep", "cloudflare", "kv", "devops", "cicd", "ci/cd", "teamcity", "docker", "tdd", "xunit", "testing", "git", "jira"]
+      "items": ["Microsoft Azure (App Service, ACR, Bicep, Managed Identity)", "Cloudflare Workers & KV", "Docker", "GitHub Actions CI/CD", "xUnit (TDD)", "Git", "Jira"],
+      "tags": ["cloud", "azure", "bicep", "cloudflare", "kv", "devops", "cicd", "ci/cd", "github actions", "docker", "tdd", "xunit", "testing", "git", "jira"]
     },
     {
       "id": "skill-data",
@@ -250,7 +250,7 @@
       "summary": "Pragmatic, quality-focused senior engineer who emphasizes maintainability, TDD, CI/CD, security boundaries, and supportive technical mentorship.",
       "details": [
         "Believes software should align tightly with real business and financial outcomes, not just technical complexity.",
-        "Values strong engineering fundamentals — xUnit/TDD, TeamCity CI/CD pipelines, read-only tool sandboxing (MCP), and keyless authentication.",
+        "Values strong engineering fundamentals — xUnit/TDD, CI/CD workflows (GitHub Actions), read-only tool sandboxing (MCP), and keyless authentication.",
         "Enjoys mentoring teammates, untangling complex validation or legacy migration issues, and translating ambiguous stakeholder requirements into reliable deliverables."
       ],
       "tags": ["leadership", "mentoring", "mentor", "style", "culture", "team", "approach", "philosophy", "values", "how she works"]
