@@ -125,10 +125,9 @@
       "current": false,
       "summary": "Cloud-native B2B & B2C multi-agent AI architecture deployed on Microsoft Azure using Model Context Protocol (MCP), Azure OpenAI hybrid model tiering, and PostgreSQL with pgvector & Row-Level Security.",
       "highlights": [
-        "Designed a hybrid two-tier LLM pipeline pairing gpt-4.1-mini (fast MCP tool calling & dynamic SQL generation) with gpt-5-mini (chain-of-thought executive risk synthesis), reducing single-query latency from ~19.7s to ~7.5s (~62% faster) while eliminating unnecessary hidden reasoning tokens.",
-        "Built dual containerized apps on Azure App Service & ACR: a B2B Enterprise AI Analyst (Streamlit) querying 50,000+ retail records via sandboxed read-only MCP servers (sales_analysis, customer_sales, enterprise_intel) and a B2C 4-Specialist Multi-Agent DIY Advisor (FastAPI + real-time SSE streaming).",
-        "Implemented semantic catalog search using pgvector (1536-d text-embedding-3-small) inside Azure PostgreSQL 17 with Row-Level Security (RLS) for store-level tenant isolation.",
-        "Enforced keyless zero-trust authentication via Azure Managed Identity (DefaultAzureCredential) and reproducible Infrastructure as Code via Azure Bicep, plus system-level prompt guardrails against off-topic abuse."
+        "Designed a two-tier Azure OpenAI architecture pairing gpt-4.1-mini for fast tool calling with gpt-5-mini for analytical summaries, reducing query latency by over 60% (from roughly 19.7s to 7.5s).",
+        "Built containerized B2B and B2C AI web applications on Azure App Service using Streamlit, FastAPI, and Model Context Protocol (MCP) servers for secure read-only queries across 50,000+ retail records.",
+        "Implemented semantic search and store-level Row-Level Security in Azure PostgreSQL with pgvector, deployed using Azure Managed Identity and Bicep."
       ],
       "technologies": ["Python", "Azure OpenAI (gpt-4.1-mini / gpt-5-mini)", "Model Context Protocol (MCP)", "Microsoft Agent Framework", "FastAPI (SSE)", "Streamlit", "PostgreSQL 17", "pgvector", "Row-Level Security (RLS)", "Docker", "Azure App Service", "Azure Bicep", "Managed Identity"],
       "tags": ["project", "zava", "compsci 714", "ai", "multi-agent", "mcp", "azure", "openai", "pgvector", "postgresql", "rls", "bicep", "fastapi", "streamlit", "docker", "python", "tiering", "latency", "enterprise"]
@@ -140,9 +139,8 @@
       "current": true,
       "summary": "Zero-build interactive resume assistant hosted on GitHub Pages, backed by a Cloudflare Workers Gemini 2.5 Flash proxy, Edge KV Response Cache, and automatic local BM25 RAG fallback.",
       "highlights": [
-        "Decoupled all resume content into a single structured JSON knowledge base with browser-native ES modules, client-side BM25 search, XSS-safe Markdown rendering, and a dynamic Resume Quick-View drawer.",
-        "Deployed a Cloudflare Worker proxy keeping GEMINI_API_KEY private with strict Origin enforcement, structured JSON follow-up generation, thinkingBudget=0 latency optimization, and automatic 429 cooldown fallback to local resume.json retrieval.",
-        "Implemented a Cloudflare Workers KV Edge Response Cache keyed by an automatic FNV-1a content hash of resume.json + normalized query, cutting repeated query latency from ~2,000ms to ~70ms (~28x faster) with zero LLM tokens and automatic cache invalidation on resume edits."
+        "Built a data-driven interactive resume web application on GitHub Pages backed by a Cloudflare Workers Gemini proxy, with automatic fallback to client-side search when API limits are reached.",
+        "Added Cloudflare Workers KV response caching with automatic version invalidation on resume updates, reducing repeated response times from roughly 2 seconds to under 100ms."
       ],
       "technologies": ["JavaScript (ES Modules)", "Cloudflare Workers", "Cloudflare Workers KV", "Gemini 2.5 Flash API", "BM25 Search", "GitHub Pages", "HTML5", "Tailwind CSS"],
       "tags": ["project", "portfolio", "resume", "chatbot", "rag", "github pages", "cloudflare", "kv", "cache", "gemini", "ruby"]
