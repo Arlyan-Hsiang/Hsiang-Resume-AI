@@ -107,14 +107,14 @@
       "period": "2015-07 – 2018-08",
       "current": false,
       "domain": "Core Banking & Digital Payments",
-      "summary": "Migrated core banking systems from Mainframe to .NET and implemented Apple Pay and Google Pay payment modules.",
+      "summary": "Developed and maintained core banking systems in COBOL on Mainframe (more than half of tenure), migrated legacy banking modules to .NET, and implemented Apple Pay and Google Pay modules.",
       "highlights": [
-        "Migrated core banking systems from Mainframe to .NET using C#, JavaScript, and MSSQL.",
+        "Developed and maintained core banking systems in COBOL on Mainframe, and migrated legacy banking modules to .NET using C#, JavaScript, and MSSQL.",
         "Developed and implemented digital payment integration modules for Apple Pay and Google Pay."
       ],
-      "technologies": ["C#", ".NET", "JavaScript", "MSSQL", "Mainframe Migration", "Apple Pay", "Google Pay"],
+      "technologies": ["COBOL", "Mainframe", "C#", ".NET", "JavaScript", "MSSQL", "Mainframe Migration", "Apple Pay", "Google Pay"],
       "clients": [],
-      "tags": ["cybersoft", "taipei", "taiwan", "banking", "mainframe", "migration", "payments", "apple pay", "google pay"]
+      "tags": ["cybersoft", "taipei", "taiwan", "banking", "cobol", "mainframe", "migration", "payments", "apple pay", "google pay"]
     }
   ],
   "projects": [
@@ -191,8 +191,8 @@
     {
       "id": "skill-backend",
       "category": "Backend & Core Languages",
-      "items": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "Python", "FastAPI", "REST APIs", "JavaScript (ES6+)", "PHP"],
-      "tags": ["backend", "csharp", "c#", "dotnet", ".net", "aspnet", "mvc", "python", "fastapi", "api", "javascript", "php", "languages"]
+      "items": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "Python", "FastAPI", "COBOL", "REST APIs", "JavaScript (ES6+)", "PHP"],
+      "tags": ["backend", "csharp", "c#", "dotnet", ".net", "aspnet", "mvc", "python", "fastapi", "cobol", "mainframe", "api", "javascript", "php", "languages"]
     },
     {
       "id": "skill-ai",
