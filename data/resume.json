@@ -252,14 +252,14 @@
     },
     {
       "id": "narrative-career-vision",
-      "title": "Long-Term Vision: Evolving Internal AI Systems into Enterprise Platforms",
-      "summary": "Long-term, Hsiang aims to lead and evolve internal AI tooling into reliable, secure, enterprise-grade systems integrated with core business operations.",
+      "title": "Long-Term Vision: Applying Internal AI Technology in Enterprises",
+      "summary": "Long-term, Hsiang aims to help companies adopt, implement, and evolve practical internal AI technologies directly within their existing operations and software systems.",
       "details": [
-        "Her long-term goal is to take internal AI prototypes and automation workflows and evolve them into production-ready enterprise platforms — complete with reliability, security best practices, observability, CI/CD, and clean integration with existing backend systems.",
-        "Many enterprise AI initiatives stall between proof-of-concept and production because of architecture, data integrity, compliance, and legacy integration challenges — the exact problems she has solved for 9+ years across core banking migrations and large-scale fintech platforms.",
-        "Combining senior C#/.NET backend architecture, a Master of Management in Accounting, and a Master of Artificial Intelligence positions her to bridge executive business goals with durable, scalable AI infrastructure."
+        "Her long-term goal is to apply and evolve internal AI technology tailored to each company's real operations — integrating AI smoothly into existing enterprise workflows and backend systems rather than building isolated prototypes.",
+        "Many enterprise AI initiatives stall between proof-of-concept and everyday adoption due to legacy integration, data integrity, security, and reliability challenges — the exact problems she has solved for 9+ years across core banking migrations and large-scale fintech systems.",
+        "Combining senior C#/.NET backend engineering, a Master of Management in Accounting, and a Master of Artificial Intelligence positions her to bridge real business goals with practical, reliable internal AI adoption."
       ],
-      "tags": ["goal", "goals", "vision", "long term", "long-term", "future", "career", "enterprise", "internal", "ai system", "platform", "next role", "looking for", "ambition", "direction"]
+      "tags": ["goal", "goals", "vision", "long term", "long-term", "future", "career", "enterprise", "internal", "ai", "companies", "adoption", "next role", "looking for", "ambition", "direction"]
     },
     {
       "id": "narrative-engineering-style",

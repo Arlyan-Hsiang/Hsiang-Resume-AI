@@ -169,7 +169,7 @@ export class ChatUI {
         this.scrollToBottom();
     }
 
-    addAssistantMessage(markdownText, sources = []) {
+    addAssistantMessage(markdownText) {
         const row = document.createElement('div');
         row.className = 'flex items-start space-x-3 animate-fade-in';
 
@@ -180,18 +180,6 @@ export class ChatUI {
         const bubble = document.createElement('div');
         bubble.className = 'bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[85%] text-sm text-slate-700';
         bubble.innerHTML = renderSafeMarkdown(markdownText);
-
-        if (sources.length > 0) {
-            const footer = document.createElement('div');
-            footer.className = 'mt-2.5 pt-2 border-t border-slate-100 flex flex-wrap gap-1.5';
-            for (const src of sources) {
-                const pill = document.createElement('span');
-                pill.className = 'text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500';
-                pill.textContent = src;
-                footer.appendChild(pill);
-            }
-            bubble.appendChild(footer);
-        }
 
         row.appendChild(avatar);
         row.appendChild(bubble);
