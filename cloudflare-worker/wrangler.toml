@@ -1,0 +1,10 @@
+name = "hsiang-resume-ai-proxy"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://arlyan-hsiang.github.io"
+GEMINI_MODEL = "gemini-2.5-flash"
+
+# Set GEMINI_API_KEY as a secret (never commit it here):
+#   npx wrangler secret put GEMINI_API_KEY

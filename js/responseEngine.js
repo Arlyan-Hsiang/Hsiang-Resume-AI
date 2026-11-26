@@ -292,6 +292,11 @@ export class ResponseEngine {
             return `**${p.category}**\n${(p.items || []).join(' • ')}`;
         }
 
+        if (doc.type === 'narrative') {
+            const bullets = (p.details || []).map((item) => `- ${item}`).join('\n');
+            return `**${p.title}**\n\n${p.summary}${bullets ? `\n\n${bullets}` : ''}`;
+        }
+
         if (doc.type === 'faq') {
             return p.answer;
         }

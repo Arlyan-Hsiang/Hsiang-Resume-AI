@@ -17,10 +17,11 @@
     "fallbackMessage": "I couldn't find an exact match for that in Hsiang's resume data. Try asking about her **work history**, **tech stack**, **AI & automation projects**, **education**, or **contact details** — or click one of the quick topics below!",
     "suggestedPrompts": [
       { "label": "Work History", "query": "Tell me about Hsiang's work experience" },
+      { "label": "Why Study AI?", "query": "Why is Hsiang studying Artificial Intelligence?" },
+      { "label": "Career Vision", "query": "What is Hsiang's long-term career goal?" },
       { "label": "Tech Stack", "query": "What is her technical stack and core skills?" },
       { "label": "AI & Automation", "query": "Tell me about her AI and workflow automation projects" },
       { "label": "Education", "query": "What is her educational background?" },
-      { "label": "Why Hire Her?", "query": "What unique value does Hsiang bring?" },
       { "label": "Contact", "query": "How can I contact Hsiang?" }
     ]
   },
@@ -236,6 +237,41 @@
       "tags": ["ai", "agents", "automation", "n8n", "openclaw", "workflow", "llm"]
     }
   ],
+  "narrative": [
+    {
+      "id": "narrative-why-ai",
+      "title": "Why Hsiang Is Studying Artificial Intelligence",
+      "summary": "Hsiang views AI as a generational inflection point comparable to the dawn of personal computing — a foundational shift that will inevitably reshape every industry and workflow.",
+      "details": [
+        "She sees today's AI transition as comparable to when computers were first introduced to the world: it is not a temporary trend, and organizations and engineers will inevitably need to build with it.",
+        "Rather than remaining a passive consumer of AI tools, she enrolled in the Master of Artificial Intelligence at the University of Auckland to build rigorous theoretical foundations alongside her 9+ years of production engineering.",
+        "She pairs academic study with hands-on systems engineering — already designing and running a self-hosted distributed workflow automation and AI agent platform (n8n, OpenClaw, Docker, Redis, PostgreSQL)."
+      ],
+      "tags": ["why", "study", "studying", "ai", "artificial intelligence", "motivation", "reason", "master", "future", "trend", "computer", "pivot", "learning"]
+    },
+    {
+      "id": "narrative-career-vision",
+      "title": "Long-Term Vision: Evolving Internal AI Systems into Enterprise Platforms",
+      "summary": "Long-term, Hsiang aims to lead and evolve internal AI tooling into reliable, secure, enterprise-grade systems integrated with core business operations.",
+      "details": [
+        "Her long-term goal is to take internal AI prototypes and automation workflows and evolve them into production-ready enterprise platforms — complete with reliability, security best practices, observability, CI/CD, and clean integration with existing backend systems.",
+        "Many enterprise AI initiatives stall between proof-of-concept and production because of architecture, data integrity, compliance, and legacy integration challenges — the exact problems she has solved for 9+ years across core banking migrations and large-scale fintech platforms.",
+        "Combining senior C#/.NET backend architecture, a Master of Management in Accounting, and a Master of Artificial Intelligence positions her to bridge executive business goals with durable, scalable AI infrastructure."
+      ],
+      "tags": ["goal", "goals", "vision", "long term", "long-term", "future", "career", "enterprise", "internal", "ai system", "platform", "next role", "looking for", "ambition", "direction"]
+    },
+    {
+      "id": "narrative-engineering-style",
+      "title": "Engineering & Leadership Approach",
+      "summary": "Pragmatic, quality-driven senior engineer focused on maintainability, security, TDD, CI/CD, and pragmatic mentorship.",
+      "details": [
+        "Believes software should align tightly with real business and financial outcomes, not just technical elegance.",
+        "Advocates for strong engineering fundamentals — xUnit/TDD, TeamCity CI/CD pipelines, thorough code reviews, and security best practices.",
+        "Enjoys mentoring teammates, unblocking complex legacy/validation issues, and translating ambiguous stakeholder requirements into clear technical deliverables."
+      ],
+      "tags": ["leadership", "mentoring", "mentor", "style", "culture", "team", "approach", "philosophy", "values", "how she works"]
+    }
+  ],
   "faqs": [
     {
       "id": "faq-greet",
@@ -274,6 +310,7 @@
     ["skills", "skill", "tech", "stack", "technology", "technologies", "languages", "tools", "expertise", "proficient"],
     ["projects", "project", "built", "build", "portfolio", "initiatives", "side project"],
     ["value", "hire", "why", "strengths", "unique", "fit", "benefit", "advantage", "stand out"],
+    ["goal", "goals", "vision", "future", "long-term", "career", "enterprise", "direction", "motivation", "reason", "why"],
     ["contact", "email", "linkedin", "github", "reach", "connect", "links", "message"],
     ["database", "databases", "sql", "mssql", "postgresql", "postgres", "redis"],
     ["testing", "test", "tdd", "xunit", "quality", "ci/cd", "cicd", "devops", "teamcity", "docker"],

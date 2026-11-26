@@ -48,12 +48,16 @@ Then open `http://localhost:8000`.
 2. In GitHub repo **Settings → Pages**, set source to **Deploy from a branch** → `main` / `/ (root)`.
 3. All asset paths are relative (`./...`), so the site works seamlessly on `https://<username>.github.io/Hsiang-Resume-AI/`.
 
-## Optional: Connecting a Live LLM (Free Tier)
+## Connecting Live Gemini AI (Free Tier, Keeps Frontend on GitHub Pages)
 
-The app works 100% statically out of the box. If you also want generative LLM phrasing while keeping the frontend on GitHub Pages:
+The app works 100% statically out of the box. To enable live **Gemini 2.5 Flash** synthesis while keeping your API key completely private:
 
-1. Deploy `cloudflare-worker/worker.js` to Cloudflare Workers.
-2. Add your `GEMINI_API_KEY` as a Worker secret (and optionally set `ALLOWED_ORIGIN=https://arlyan-hsiang.github.io`).
-3. Paste the Worker URL into `llmProxyUrl` in `js/config.js`.
+1. Get a free Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey).
+2. In [Cloudflare Workers](https://dash.cloudflare.com/) → **Workers & Pages** → **Create Worker**:
+   - Paste the contents of [`cloudflare-worker/worker.js`](./cloudflare-worker/worker.js) and click **Deploy**.
+   - Go to **Settings → Variables and Secrets** and add:
+     - **Secret:** `GEMINI_API_KEY` = your Google AI Studio key
+     - **Variable:** `ALLOWED_ORIGIN` = `https://arlyan-hsiang.github.io`
+3. Copy your Worker URL (e.g. `https://hsiang-resume-ai-proxy.<your-subdomain>.workers.dev`) into `llmProxyUrl` in [`js/config.js`](./js/config.js) and push to `main`.
 
-If the Worker is ever unreachable or rate-limited, the app automatically falls back to the local BM25 RAG engine.
+If the Worker is ever unreachable or rate-limited, the app automatically falls back to the local BM25 RAG engine without breaking.

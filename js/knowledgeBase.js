@@ -202,6 +202,17 @@ export class ResumeKnowledgeBase {
             });
         }
 
+        for (const item of data.narrative || []) {
+            this._addDocument({
+                id: item.id,
+                type: 'narrative',
+                title: item.title,
+                searchText: [item.title, item.summary, ...(item.details || [])].join(' '),
+                tags: ['story', 'motivation', 'narrative', ...(item.tags || [])],
+                payload: item
+            });
+        }
+
         for (const faq of data.faqs || []) {
             this._addDocument({
                 id: faq.id,
@@ -283,12 +294,14 @@ export class ResumeKnowledgeBase {
         });
         if (mentionsSpecific) return null;
 
+        // If asking an open-ended motivation/vision/leadership question, use ranked BM25 retrieval instead of a broad section dump
+        const reasoningTerms = ['why', 'reason', 'motivation', 'goal', 'goals', 'vision', 'future', 'enterprise', 'trend', 'style', 'approach', 'hire', 'value', 'unique', 'strengths', 'fit'];
+        if (tokens.some((t) => reasoningTerms.includes(t)) || /\bwhy\b/i.test(q)) {
+            return null;
+        }
+
         for (const matcher of sectionMatchers) {
             if (tokens.some((t) => matcher.terms.includes(t))) {
-                // Only treat as broad section if query doesn't also ask specifically about value/why hire
-                if (tokens.some((t) => ['why', 'hire', 'value', 'unique'].includes(t))) {
-                    return null;
-                }
                 return matcher.type;
             }
         }
@@ -396,7 +409,7 @@ export class ResumeKnowledgeBase {
     }
 
     getNextUndiscussed(discussedChecker) {
-        const priorityTypes = ['value', 'project', 'education', 'experience', 'skills'];
+        const priorityTypes = ['narrative', 'value', 'project', 'education', 'experience', 'skills'];
         for (const type of priorityTypes) {
             const candidate = this.documents.find((d) => d.type === type && !discussedChecker(d.id));
             if (candidate) return candidate;
@@ -405,12 +418,68 @@ export class ResumeKnowledgeBase {
     }
 
     /**
-     * Produces a compact plain-text context block for an optional LLM proxy.
+     * Produces a compact structured resume digest + focused search hits for the LLM proxy.
+     * Keeps all context grounded in resume.json without exceeding ~2,000 tokens.
      */
-    buildLlmContext(matchedDocs) {
-        const c = this.data.candidate || {};
-        const header = `Candidate: ${c.name} (${c.title}, ${c.location})\nSummary: ${c.summary}`;
-        const excerpts = matchedDocs.map((item) => `[${item.doc.type.toUpperCase()}] ${item.doc.title}: ${item.doc.searchText}`);
-        return `${header}\n\nRelevant Resume Excerpts:\n${excerpts.join('\n')}`;
+    buildLlmContext(matchedDocs = []) {
+        const d = this.data;
+        const c = d.candidate || {};
+        const sections = [
+            `CANDIDATE: ${c.name || ''} | ${c.title || ''} | ${c.location || ''} | ${c.yearsExperience || ''} yrs exp`,
+            `HEADLINE: ${c.headline || ''}`,
+            `SUMMARY: ${c.summary || ''}`,
+            `VALUE PROPOSITION: ${c.valueProposition || ''}`,
+            c.links ? `LINKS: Email=${c.links.email || ''}, LinkedIn=${c.links.linkedin || ''}, GitHub=${c.links.github || ''}` : ''
+        ];
+
+        if ((d.narrative || []).length) {
+            sections.push(
+                'MOTIVATION & CAREER VISION:\n' +
+                d.narrative.map((n) => `- ${n.title}: ${n.summary} ${(n.details || []).join(' ')}`).join('\n')
+            );
+        }
+
+        if ((d.experience || []).length) {
+            sections.push(
+                'EXPERIENCE:\n' +
+                d.experience
+                    .map((r) => `- ${r.title} at ${r.company} (${r.location}, ${r.period}): ${(r.highlights || []).join(' ')} [Tech: ${(r.technologies || []).join(', ')}]`)
+                    .join('\n')
+            );
+        }
+
+        if ((d.projects || []).length) {
+            sections.push(
+                'PROJECTS:\n' +
+                d.projects
+                    .map((p) => `- ${p.title} (${p.period}): ${p.summary} ${(p.highlights || []).join(' ')} [Stack: ${(p.technologies || []).join(', ')}]`)
+                    .join('\n')
+            );
+        }
+
+        if ((d.education || []).length) {
+            sections.push(
+                'EDUCATION:\n' +
+                d.education
+                    .map((e) => `- ${e.degree}${e.specialization ? ` (${e.specialization})` : ''} — ${e.institution}, ${e.location} (${e.period}) ${(e.notes || []).join(' ')}`)
+                    .join('\n')
+            );
+        }
+
+        if ((d.skills || []).length) {
+            sections.push(
+                'SKILLS:\n' +
+                d.skills.map((s) => `- ${s.category}: ${(s.items || []).join(', ')}`).join('\n')
+            );
+        }
+
+        if (matchedDocs.length) {
+            sections.push(
+                'MOST RELEVANT RETRIEVED TOPICS:\n' +
+                matchedDocs.map((item) => `- [${item.doc.type}] ${item.doc.title}`).join('\n')
+            );
+        }
+
+        return sections.filter(Boolean).join('\n\n');
     }
 }
