@@ -1,25 +1,29 @@
 /**
- * Cloudflare Worker — Secure Gemini LLM Proxy for GitHub Pages Resume Assistant
+ * Cloudflare Worker — Secure Gemini LLM Proxy + Edge KV Response Cache
  *
  * Keeps `GEMINI_API_KEY` private on Cloudflare's edge while the static frontend
  * stays hosted on GitHub Pages (https://arlyan-hsiang.github.io/Hsiang-Resume-AI/).
  *
- * Environment Variables / Secrets to configure in Cloudflare Workers:
+ * Bindings / Environment Variables:
  *   - GEMINI_API_KEY  (Secret, required): Google AI Studio API key
  *   - ALLOWED_ORIGIN  (Variable, recommended): https://arlyan-hsiang.github.io
  *   - GEMINI_MODEL    (Variable, optional): defaults to gemini-2.5-flash
+ *   - RESPONSE_CACHE  (KV Namespace, optional): caches stateless replies by (model, resumeVersion, query)
  */
 
 const MAX_QUERY_CHARS = 500;
 const MAX_CONTEXT_CHARS = 12000;
 const MAX_HISTORY_TURNS = 6;
 const MAX_TURN_CHARS = 600;
+const CACHE_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
-function jsonResponse(body, status, corsHeaders) {
+const CONTEXT_DEPENDENT_RE = /\b(it|this|that|they|them|more|else|again|previous|above|former|latter)\b/i;
+
+function jsonResponse(body, status, headers) {
     return new Response(JSON.stringify(body), {
         status,
         headers: {
-            ...corsHeaders,
+            ...headers,
             'Content-Type': 'application/json; charset=utf-8'
         }
     });
@@ -32,12 +36,28 @@ function buildCorsHeaders(requestOrigin, configuredOrigin) {
         'Access-Control-Allow-Origin': allowOriginHeader,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Expose-Headers': 'X-Cache',
         'Vary': 'Origin'
     };
 }
 
+function normalizeQuery(query) {
+    return query
+        .toLowerCase()
+        .replace(/[^a-z0-9#+.]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+async function buildCacheKey(model, cacheVersion, normalizedQuery) {
+    const raw = `v1|${model}|${cacheVersion}|${normalizedQuery}`;
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
+    const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    return `resp:${cacheVersion}:${hex.slice(0, 32)}`;
+}
+
 export default {
-    async fetch(request, env) {
+    async fetch(request, env, ctx) {
         const requestOrigin = request.headers.get('Origin') || '';
         const configuredOrigin = (env.ALLOWED_ORIGIN || '').trim();
         const corsHeaders = buildCorsHeaders(requestOrigin, configuredOrigin);
@@ -52,7 +72,8 @@ export default {
                 {
                     status: 'ok',
                     model: env.GEMINI_MODEL || 'gemini-2.5-flash',
-                    apiKeyConfigured: Boolean(env.GEMINI_API_KEY)
+                    apiKeyConfigured: Boolean(env.GEMINI_API_KEY),
+                    cacheConfigured: Boolean(env.RESPONSE_CACHE)
                 },
                 200,
                 corsHeaders
@@ -63,7 +84,7 @@ export default {
             return jsonResponse({ error: 'Method not allowed' }, 405, corsHeaders);
         }
 
-        // Enforce strict origin allowlist when ALLOWED_ORIGIN is configured (prevents third-party sites abusing your key)
+        // Enforce strict origin allowlist when ALLOWED_ORIGIN is configured
         if (configuredOrigin && configuredOrigin !== '*') {
             const allowedList = configuredOrigin.split(',').map((s) => s.trim()).filter(Boolean);
             if (!requestOrigin || !allowedList.includes(requestOrigin)) {
@@ -83,11 +104,46 @@ export default {
             }
 
             const assistantName = typeof body.assistantName === 'string' ? body.assistantName.slice(0, 40) : 'Ruby';
-            const recruiterName = typeof body.recruiterName === 'string' ? body.recruiterName.slice(0, 40) : '';
+            const recruiterName = typeof body.recruiterName === 'string' ? body.recruiterName.trim().slice(0, 40) : '';
             const context = typeof body.context === 'string' ? body.context.slice(0, MAX_CONTEXT_CHARS) : '';
             const rawHistory = Array.isArray(body.history) ? body.history : [];
+            const cacheVersion = typeof body.cacheVersion === 'string' && /^[a-zA-Z0-9._-]{1,40}$/.test(body.cacheVersion)
+                ? body.cacheVersion
+                : 'default';
 
             const model = (env.GEMINI_MODEL || 'gemini-2.5-flash').trim();
+            const normalized = normalizeQuery(query);
+
+            // Cache only non-personalized, self-contained queries to prevent cross-recruiter leakage
+            const canUseCache = Boolean(
+                env.RESPONSE_CACHE &&
+                !recruiterName &&
+                normalized.length >= 3 &&
+                (rawHistory.length === 0 || !CONTEXT_DEPENDENT_RE.test(query))
+            );
+
+            let cacheKey = null;
+            if (canUseCache) {
+                cacheKey = await buildCacheKey(model, cacheVersion, normalized);
+                try {
+                    const cached = await env.RESPONSE_CACHE.get(cacheKey, { type: 'json' });
+                    if (cached && typeof cached.reply === 'string' && cached.reply.trim()) {
+                        return jsonResponse(
+                            {
+                                reply: cached.reply,
+                                followUps: Array.isArray(cached.followUps) ? cached.followUps : [],
+                                model: cached.model || model,
+                                cached: true
+                            },
+                            200,
+                            { ...corsHeaders, 'X-Cache': 'HIT' }
+                        );
+                    }
+                } catch {
+                    // Cache read errors should never break live inference
+                }
+            }
+
             const systemInstruction = [
                 `You are ${assistantName}, a warm, sharp, professional interactive resume assistant representing the candidate described below.`,
                 'STRICT RULES:',
@@ -148,7 +204,7 @@ export default {
             if (!apiRes.ok) {
                 const status = apiRes.status === 429 ? 429 : 502;
                 const message = apiRes.status === 429 ? 'Gemini quota or rate limit exceeded' : 'Upstream Gemini API error';
-                return jsonResponse({ error: message, upstreamStatus: apiRes.status }, status, corsHeaders);
+                return jsonResponse({ error: message, upstreamStatus: apiRes.status }, status, { ...corsHeaders, 'X-Cache': 'BYPASS' });
             }
 
             const data = await apiRes.json();
@@ -158,7 +214,7 @@ export default {
                 .trim();
 
             if (!rawText) {
-                return jsonResponse({ error: 'Empty response from Gemini' }, 502, corsHeaders);
+                return jsonResponse({ error: 'Empty response from Gemini' }, 502, { ...corsHeaders, 'X-Cache': 'BYPASS' });
             }
 
             let reply = rawText;
@@ -178,7 +234,23 @@ export default {
                 // Fall back to plain text reply if JSON parsing fails
             }
 
-            return jsonResponse({ reply, followUps, model }, 200, corsHeaders);
+            if (canUseCache && cacheKey) {
+                const cachePayload = JSON.stringify({ reply, followUps, model, cachedAt: Date.now() });
+                const writePromise = env.RESPONSE_CACHE.put(cacheKey, cachePayload, {
+                    expirationTtl: CACHE_TTL_SECONDS
+                }).catch(() => {});
+                if (ctx && typeof ctx.waitUntil === 'function') {
+                    ctx.waitUntil(writePromise);
+                } else {
+                    await writePromise;
+                }
+            }
+
+            return jsonResponse(
+                { reply, followUps, model, cached: false },
+                200,
+                { ...corsHeaders, 'X-Cache': canUseCache ? 'MISS' : 'BYPASS' }
+            );
         } catch {
             return jsonResponse({ error: 'Invalid JSON request body' }, 400, corsHeaders);
         }

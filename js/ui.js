@@ -117,7 +117,9 @@ export class ChatUI {
 
     setEngineMode(mode) {
         if (!this.els.engineBadge) return;
-        if (mode === 'llm') {
+        if (mode === 'llm-cached') {
+            this.els.engineBadge.textContent = 'LLM + Resume RAG (Edge Cached)';
+        } else if (mode === 'llm') {
             this.els.engineBadge.textContent = 'LLM + Resume RAG Active';
         } else if (mode === 'fallback') {
             this.els.engineBadge.textContent = 'Local Resume RAG (Auto-Fallback)';

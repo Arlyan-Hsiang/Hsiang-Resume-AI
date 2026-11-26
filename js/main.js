@@ -38,7 +38,7 @@ async function bootstrap() {
                     await new Promise((resolve) => setTimeout(resolve, remaining));
                 }
                 ui.hideTyping();
-                if (result.mode === 'llm' || result.mode === 'fallback') {
+                if (result.mode === 'llm' || result.mode === 'llm-cached' || result.mode === 'fallback') {
                     ui.setEngineMode(result.mode);
                 }
                 ui.addAssistantMessage(result.text, result.followUps, handleQuery);

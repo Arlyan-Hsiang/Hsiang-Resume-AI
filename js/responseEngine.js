@@ -139,7 +139,7 @@ export class ResponseEngine {
                     : this._suggestLocalFollowUps(contextDocs[0]?.doc?.type || 'summary', docIds);
                 return {
                     text: llmResult.reply,
-                    mode: 'llm',
+                    mode: llmResult.cached ? 'llm-cached' : 'llm',
                     followUps
                 };
             }
@@ -203,6 +203,7 @@ export class ResponseEngine {
                 signal: controller.signal,
                 body: JSON.stringify({
                     query,
+                    cacheVersion: this.kb.getCacheVersion(),
                     recruiterName: this.memory.getRecruiterName(),
                     assistantName: this.kb.data.assistant?.name || 'Assistant',
                     context: this.kb.buildLlmContext(matchedDocs),
@@ -219,7 +220,8 @@ export class ResponseEngine {
             if (typeof payload.reply !== 'string' || !payload.reply.trim()) return null;
             return {
                 reply: payload.reply.trim(),
-                followUps: Array.isArray(payload.followUps) ? payload.followUps : []
+                followUps: Array.isArray(payload.followUps) ? payload.followUps : [],
+                cached: Boolean(payload.cached)
             };
         } catch {
             return null;

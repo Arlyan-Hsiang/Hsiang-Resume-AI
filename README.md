@@ -58,6 +58,7 @@ The app works 100% statically out of the box. To enable live **Gemini 2.5 Flash*
    - Go to **Settings → Variables and Secrets** and add:
      - **Secret:** `GEMINI_API_KEY` = your Google AI Studio key
      - **Variable:** `ALLOWED_ORIGIN` = `https://arlyan-hsiang.github.io`
-3. Copy your Worker URL (e.g. `https://hsiang-resume-ai-proxy.<your-subdomain>.workers.dev`) into `llmProxyUrl` in [`js/config.js`](./js/config.js) and push to `main`.
+3. Optional (recommended): Bind a Cloudflare **KV Namespace** named `RESPONSE_CACHE` to cache stateless LLM replies at the edge (7-day TTL). Cache keys automatically include a content hash of `data/resume.json`, so editing your resume auto-invalidates old entries with zero manual steps.
+4. Copy your Worker URL (e.g. `https://hsiang-resume-ai-proxy.<your-subdomain>.workers.dev`) into `llmProxyUrl` in [`js/config.js`](./js/config.js) and push to `main`.
 
-If the Worker is ever unreachable or rate-limited, the app automatically falls back to the local BM25 RAG engine without breaking.
+If the Worker is ever unreachable or hits Gemini rate limits (`429`), the app automatically activates a 5-minute cooldown and falls back to the local BM25 RAG engine without breaking.

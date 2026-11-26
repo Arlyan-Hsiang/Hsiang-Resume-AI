@@ -64,6 +64,26 @@ export class ResumeKnowledgeBase {
         this._buildSynonymIndex(resumeData.synonyms || []);
         this._indexResumeData(resumeData);
         this._computeStats();
+        this.cacheVersion = this._computeContentVersion(resumeData);
+    }
+
+    /**
+     * Computes a deterministic FNV-1a content hash of resume.json so edge KV caches
+     * automatically invalidate whenever resume.json is edited — with zero manual version bumps.
+     */
+    _computeContentVersion(data) {
+        const str = JSON.stringify(data);
+        let hash = 0x811c9dc5;
+        for (let i = 0; i < str.length; i++) {
+            hash ^= str.charCodeAt(i);
+            hash = Math.imul(hash, 0x01000193);
+        }
+        const hex = (hash >>> 0).toString(16).padStart(8, '0');
+        return `${data.schemaVersion || '1'}-${hex}`;
+    }
+
+    getCacheVersion() {
+        return this.cacheVersion;
     }
 
     _buildSynonymIndex(groups) {
