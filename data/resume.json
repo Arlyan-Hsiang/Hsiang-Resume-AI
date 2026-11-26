@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "assistant": {
     "name": "Ruby",
     "displayName": "Hsiang Tzu Tseng",
@@ -11,16 +11,16 @@
       "primaryDark": "#003366",
       "accent": "#0ea5e9"
     },
-    "greeting": "Hi there! I'm **Ruby**, Hsiang Tzu's digital cat assistant. Ask me anything about Hsiang's experience, technical stack, AI projects, education, or how to get in touch.",
+    "greeting": "Hi there! I'm **Ruby**, Hsiang Tzu's digital cat assistant. Ask me anything about Hsiang's experience, technical stack, AI engineering projects, education, or how to get in touch.",
     "returningGreeting": "Welcome back, **{name}**! I'm Ruby, ready to continue exploring Hsiang's background and technical expertise. What would you like to know?",
-    "inputPlaceholder": "Ask about experience, C#/.NET, AI projects, education...",
-    "fallbackMessage": "I couldn't find an exact match for that in Hsiang's resume data. Try asking about her **work history**, **tech stack**, **AI & automation projects**, **education**, or **contact details** — or click one of the quick topics below!",
+    "inputPlaceholder": "Ask about FNZ, C#/.NET, Azure AI / MCP projects, education...",
+    "fallbackMessage": "I couldn't find an exact match for that in Hsiang's resume data. Try asking about her **work history**, **tech stack**, **AI projects (Zava / Resume AI)**, **education**, or **contact details** — or click one of the quick topics below!",
     "suggestedPrompts": [
       { "label": "Work History", "query": "Tell me about Hsiang's work experience" },
+      { "label": "Zava AI Project", "query": "Tell me about the Zava Enterprise Multi-Agent AI project" },
       { "label": "Why Study AI?", "query": "Why is Hsiang studying Artificial Intelligence?" },
       { "label": "Career Vision", "query": "What is Hsiang's long-term career goal?" },
       { "label": "Tech Stack", "query": "What is her technical stack and core skills?" },
-      { "label": "AI & Automation", "query": "Tell me about her AI and workflow automation projects" },
       { "label": "Education", "query": "What is her educational background?" },
       { "label": "Contact", "query": "How can I contact Hsiang?" }
     ]
@@ -30,11 +30,11 @@
     "shortName": "Hsiang",
     "alternateName": "Cyan Tseng",
     "title": "Senior Analyst Developer",
-    "headline": "Senior Software Engineer | C# & .NET | Financial Platforms, Workflow Automation & AI",
+    "headline": "Senior Software Engineer | C# & .NET | Enterprise Fintech & Applied AI Architecture",
     "location": "Auckland, New Zealand",
-    "yearsExperience": "9+",
-    "summary": "Software Developer with a unique blend of Senior Software Engineering and Financial/Accounting background, currently pursuing a Master of Artificial Intelligence at the University of Auckland. Expert at translating complex business requirements into robust technical solutions for large-scale financial platforms, managing stakeholder expectations, and leading technical initiatives that enhance system performance and team productivity.",
-    "valueProposition": "Hsiang brings a rare intersection of 9+ years of senior backend engineering (C#/.NET, SQL Server, React), a Master of Management in Accounting, and ongoing Master of Artificial Intelligence studies — allowing her to bridge complex financial domain logic, enterprise software reliability, and modern AI/workflow automation.",
+    "yearsExperience": "8+",
+    "summary": "Senior Software Developer with 8+ years of software engineering experience across enterprise financial platforms and core banking migrations, paired with a Master of Management (Accounting) and a Master of Artificial Intelligence (in progress) at the University of Auckland. Experienced in translating complex financial and operational requirements into reliable backend systems (C#/.NET, SQL Server, React) and building cloud-native multi-agent AI architectures on Azure (MCP, Azure OpenAI, PostgreSQL/pgvector).",
+    "valueProposition": "Hsiang combines 8+ years of enterprise software engineering in financial platforms (FNZ, Cybersoft, PSA), a Master of Management in Accounting, and hands-on Master of Artificial Intelligence architecture work (Azure OpenAI hybrid model tiering, MCP tool sandboxing, pgvector RAG, Cloudflare Edge KV caching) — bridging complex business/financial logic with practical, production-ready internal AI adoption.",
     "links": {
       "email": "htse856@aucklanduni.ac.nz",
       "linkedin": "https://www.linkedin.com/in/tseng-hsiangtzu/",
@@ -45,41 +45,24 @@
   },
   "experience": [
     {
-      "id": "exp-fnz-senior",
-      "title": "Senior Analyst Developer",
+      "id": "exp-fnz",
+      "title": "Senior Analyst Developer (Promoted from Analyst Developer)",
       "company": "FNZ",
-      "location": "Auckland, NZ",
-      "period": "2025-04 – Current",
+      "location": "Auckland & Wellington, NZ",
+      "period": "2022-04 – Current",
       "current": true,
-      "domain": "Fintech / Wealth Management Platform",
-      "summary": "Leading technical guidance, CI/CD automation, and code quality standards for enterprise wealth-management software in Auckland.",
+      "domain": "Fintech / Global Wealth Management Platforms",
+      "summary": "Promoted from Analyst Developer (Wellington, 2022-04 – 2025-04) to Senior Analyst Developer (Auckland, 2025-04 – Current), building and maintaining large-scale wealth-management platforms for global financial clients including Monzo, Lloyds, and Vanguard.",
       "highlights": [
-        "Provide technical guidance and mentorship to team members, ensuring project milestones are met with high-quality deliverables.",
-        "Integrate TeamCity CI/CD to streamline the development and deployment process.",
-        "Maintain code review processes to enforce coding standards, improve system maintainability, and ensure security best practices across the platform."
+        "Promoted to Senior Analyst Developer (Apr 2025, Auckland), providing technical guidance and mentorship to team members to support timely, high-quality project deliverables.",
+        "Integrated TeamCity CI/CD pipelines to streamline build, testing, and deployment workflows across enterprise financial environments.",
+        "Engineered and maintained full-stack financial platform solutions using C#, .NET Core, ASP.NET MVC, VB.NET, JavaScript, ReactJS, REST APIs, and MS SQL Server.",
+        "Delivered production solutions for major UK and global financial institutions including Monzo, Lloyds, and Vanguard.",
+        "Developed and maintained comprehensive xUnit test suites to support TDD practices, system reliability, and secure, maintainable code."
       ],
-      "technologies": ["C#", ".NET Core", "ASP.NET MVC", "MSSQL", "TeamCity", "CI/CD", "Git", "Code Review", "Security Best Practices"],
-      "clients": [],
-      "tags": ["current", "leadership", "mentorship", "senior", "fnz", "auckland", "fintech", "cicd", "teamcity", "security"]
-    },
-    {
-      "id": "exp-fnz-analyst",
-      "title": "Analyst Developer",
-      "company": "FNZ",
-      "location": "Wellington, NZ",
-      "period": "2022-04 – 2025-04",
-      "current": false,
-      "domain": "Fintech / Global Financial Clients",
-      "summary": "Delivered full-stack financial platform solutions and TDD test coverage for major UK/global financial institutions including Monzo, Lloyds, and Vanguard.",
-      "highlights": [
-        "Delivered quality software solutions using C#, ASP.NET MVC, .NET Core, VB.NET, JavaScript, MS SQL, REST APIs, and ReactJS.",
-        "Used Git for source control and Jira for agile project management.",
-        "Worked for major financial clients including Monzo, Lloyds, and Vanguard to deliver reliable technical solutions for their financial platforms.",
-        "Developed and maintained comprehensive unit tests using xUnit to drive TDD practices and ensure platform reliability."
-      ],
-      "technologies": ["C#", "ASP.NET MVC", ".NET Core", "VB.NET", "JavaScript", "MSSQL", "REST APIs", "ReactJS", "xUnit", "TDD", "Git", "Jira"],
+      "technologies": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "JavaScript", "ReactJS", "REST APIs", "MSSQL", "TeamCity CI/CD", "xUnit", "TDD", "Git", "Jira"],
       "clients": ["Monzo", "Lloyds", "Vanguard"],
-      "tags": ["fnz", "wellington", "fintech", "monzo", "lloyds", "vanguard", "tdd", "xunit", "react", "api"]
+      "tags": ["current", "promotion", "senior", "mentorship", "fnz", "auckland", "wellington", "fintech", "monzo", "lloyds", "vanguard", "cicd", "teamcity", "tdd", "xunit", "react", "api"]
     },
     {
       "id": "exp-psa",
@@ -91,8 +74,8 @@
       "domain": "Internal Enterprise Systems",
       "summary": "Built and stabilized internal operational systems in C#.NET, JavaScript, and MSSQL.",
       "highlights": [
-        "Developed internal operational systems using C#.NET, JavaScript, and MSSQL, ensuring high performance and data integrity.",
-        "Identified and resolved complex system validation issues to ensure consistent program uptime.",
+        "Developed internal operational systems using C#.NET, JavaScript, and MSSQL, ensuring strong performance and data integrity.",
+        "Diagnosed and resolved complex system validation issues to maintain consistent program uptime.",
         "Contributed to the design and planning of next-generation software rollouts."
       ],
       "technologies": ["C#", ".NET", "JavaScript", "MSSQL"],
@@ -107,10 +90,10 @@
       "period": "2019-01 – 2021-04",
       "current": false,
       "domain": "Operations & Internal Tooling",
-      "summary": "Built custom C# desktop tools and full-stack web apps for shift management and internal e-learning alongside IT solutions.",
+      "summary": "Built custom C# desktop tools and full-stack PHP/HTML/CSS web platforms for shift management and internal e-learning alongside technical support.",
       "highlights": [
-        "Analyzed technical requirements to design and implement tailored hardware and software solutions.",
-        "Developed custom desktop applications using C# and built full-stack web platforms (PHP, HTML, CSS) for shift management and internal e-learning."
+        "Analyzed operational requirements to design and implement tailored hardware and software solutions.",
+        "Developed custom desktop applications in C# and built full-stack web platforms (PHP, HTML, CSS) for shift management and internal e-learning."
       ],
       "technologies": ["C#", "PHP", "HTML", "CSS", "Desktop Applications"],
       "clients": [],
@@ -127,7 +110,7 @@
       "summary": "Migrated core banking systems from Mainframe to .NET and implemented Apple Pay and Google Pay payment modules.",
       "highlights": [
         "Migrated core banking systems from Mainframe to .NET using C#, JavaScript, and MSSQL.",
-        "Developed and implemented payment integration modules for Apple Pay and Google Pay."
+        "Developed and implemented digital payment integration modules for Apple Pay and Google Pay."
       ],
       "technologies": ["C#", ".NET", "JavaScript", "MSSQL", "Mainframe Migration", "Apple Pay", "Google Pay"],
       "clients": [],
@@ -136,33 +119,33 @@
   ],
   "projects": [
     {
-      "id": "proj-ai-automation",
-      "title": "Self-Hosted Workflow Automation & AI Agent Architecture",
-      "period": "2025-11 – Current",
-      "current": true,
-      "summary": "Scalable containerized AI agent and workflow automation platform built with n8n, OpenClaw, Docker, Redis, and PostgreSQL.",
+      "id": "proj-zava-ai",
+      "title": "Zava DIY Enterprise Multi-Agent AI System (COMPSCI 714 — Team 5)",
+      "period": "2026-08 – 2026-10",
+      "current": false,
+      "summary": "Cloud-native B2B & B2C multi-agent AI architecture deployed on Microsoft Azure using Model Context Protocol (MCP), Azure OpenAI hybrid model tiering, and PostgreSQL with pgvector & Row-Level Security.",
       "highlights": [
-        "Designed and deployed a scalable automation platform using n8n and OpenClaw entirely within Docker environments.",
-        "Implemented a distributed n8n architecture using Redis to execute high-frequency API polling and asynchronous resource management across multiple worker nodes.",
-        "Configured and managed persistent data storage using containerized PostgreSQL instances.",
-        "Developed custom automated workflows to integrate external APIs and AI agents, demonstrating strong problem-solving and system integration skills."
+        "Designed a hybrid two-tier LLM pipeline pairing gpt-4.1-mini (fast MCP tool calling & dynamic SQL generation) with gpt-5-mini (chain-of-thought executive risk synthesis), reducing single-query latency from ~19.7s to ~7.5s (~62% faster) while eliminating unnecessary hidden reasoning tokens.",
+        "Built dual containerized apps on Azure App Service & ACR: a B2B Enterprise AI Analyst (Streamlit) querying 50,000+ retail records via sandboxed read-only MCP servers (sales_analysis, customer_sales, enterprise_intel) and a B2C 4-Specialist Multi-Agent DIY Advisor (FastAPI + real-time SSE streaming).",
+        "Implemented semantic catalog search using pgvector (1536-d text-embedding-3-small) inside Azure PostgreSQL 17 with Row-Level Security (RLS) for store-level tenant isolation.",
+        "Enforced keyless zero-trust authentication via Azure Managed Identity (DefaultAzureCredential) and reproducible Infrastructure as Code via Azure Bicep, plus system-level prompt guardrails against off-topic abuse."
       ],
-      "technologies": ["n8n", "OpenClaw", "Docker", "Redis", "PostgreSQL", "AI Agents", "REST APIs", "Distributed Systems"],
-      "tags": ["project", "ai", "agent", "automation", "workflow", "n8n", "openclaw", "docker", "redis", "postgres", "postgresql", "self-hosted"]
+      "technologies": ["Python", "Azure OpenAI (gpt-4.1-mini / gpt-5-mini)", "Model Context Protocol (MCP)", "Microsoft Agent Framework", "FastAPI (SSE)", "Streamlit", "PostgreSQL 17", "pgvector", "Row-Level Security (RLS)", "Docker", "Azure App Service", "Azure Bicep", "Managed Identity"],
+      "tags": ["project", "zava", "compsci 714", "ai", "multi-agent", "mcp", "azure", "openai", "pgvector", "postgresql", "rls", "bicep", "fastapi", "streamlit", "docker", "python", "tiering", "latency", "enterprise"]
     },
     {
       "id": "proj-resume-ai",
-      "title": "Interactive AI Resume Assistant (Ruby)",
+      "title": "Interactive AI Resume Assistant (Ruby) — Live Portfolio App",
       "period": "2026 – Current",
       "current": true,
-      "summary": "Data-driven interactive resume assistant deployed statically on GitHub Pages with client-side BM25 retrieval and optional serverless LLM integration.",
+      "summary": "Zero-build interactive resume assistant hosted on GitHub Pages, backed by a Cloudflare Workers Gemini 2.5 Flash proxy, Edge KV Response Cache, and automatic local BM25 RAG fallback.",
       "highlights": [
-        "Decoupled all candidate data into a structured JSON knowledge base with zero hardcoded resume logic.",
-        "Built a modular browser-native ES module architecture featuring BM25 ranking, synonym expansion, fuzzy matching, and optional LLM proxy support.",
-        "Designed with XSS-safe DOM rendering and an interactive resume quick-view drawer."
+        "Decoupled all resume content into a single structured JSON knowledge base with browser-native ES modules, client-side BM25 search, XSS-safe Markdown rendering, and a dynamic Resume Quick-View drawer.",
+        "Deployed a Cloudflare Worker proxy keeping GEMINI_API_KEY private with strict Origin enforcement, structured JSON follow-up generation, thinkingBudget=0 latency optimization, and automatic 429 cooldown fallback to local resume.json retrieval.",
+        "Implemented a Cloudflare Workers KV Edge Response Cache keyed by an automatic FNV-1a content hash of resume.json + normalized query, cutting repeated query latency from ~2,000ms to ~70ms (~28x faster) with zero LLM tokens and automatic cache invalidation on resume edits."
       ],
-      "technologies": ["JavaScript (ES Modules)", "HTML5", "Tailwind CSS", "BM25 Search", "GitHub Pages", "Cloudflare Workers"],
-      "tags": ["project", "portfolio", "resume", "chatbot", "rag", "github pages", "ruby"]
+      "technologies": ["JavaScript (ES Modules)", "Cloudflare Workers", "Cloudflare Workers KV", "Gemini 2.5 Flash API", "BM25 Search", "GitHub Pages", "HTML5", "Tailwind CSS"],
+      "tags": ["project", "portfolio", "resume", "chatbot", "rag", "github pages", "cloudflare", "kv", "cache", "gemini", "ruby"]
     }
   ],
   "education": [
@@ -175,7 +158,7 @@
       "period": "2026-07 – Current",
       "current": true,
       "notes": [
-        "Currently pursuing postgraduate study in Artificial Intelligence alongside senior software engineering work."
+        "In progress — postgraduate study in AI architecture, multi-agent systems, and applied machine learning alongside senior software engineering work."
       ],
       "tags": ["education", "master", "ai", "artificial intelligence", "uoa", "auckland", "university", "current"]
     },
@@ -188,7 +171,7 @@
       "period": "2018-09 – 2019-12",
       "current": false,
       "notes": [
-        "Specialized in Accounting, providing deep understanding of business operations, financial reporting, and domain logic for fintech platforms."
+        "Specialized in Accounting, providing strong understanding of financial reporting, business operations, and domain logic for fintech systems."
       ],
       "tags": ["education", "master", "management", "accounting", "finance", "uoa", "auckland", "university"]
     },
@@ -210,32 +193,32 @@
     {
       "id": "skill-backend",
       "category": "Backend & Core Languages",
-      "items": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "REST APIs", "JavaScript", "PHP"],
-      "tags": ["backend", "csharp", "c#", "dotnet", ".net", "aspnet", "mvc", "api", "javascript", "php", "languages"]
-    },
-    {
-      "id": "skill-frontend",
-      "category": "Frontend & Web",
-      "items": ["ReactJS", "JavaScript (ES6+)", "HTML5", "CSS3"],
-      "tags": ["frontend", "react", "reactjs", "ui", "web", "html", "css", "javascript"]
-    },
-    {
-      "id": "skill-data",
-      "category": "Databases & Caching",
-      "items": ["MS SQL Server (MSSQL)", "PostgreSQL", "Redis"],
-      "tags": ["database", "db", "sql", "mssql", "postgres", "postgresql", "redis", "data"]
-    },
-    {
-      "id": "skill-devops",
-      "category": "DevOps, Testing & Architecture",
-      "items": ["TeamCity CI/CD", "Docker", "xUnit (TDD)", "Git", "Jira", "Code Review & Security Best Practices", "System Architecture"],
-      "tags": ["devops", "cicd", "ci/cd", "teamcity", "docker", "tdd", "xunit", "testing", "git", "jira", "architecture", "security"]
+      "items": ["C#", ".NET Core", "ASP.NET MVC", "VB.NET", "Python", "FastAPI", "REST APIs", "JavaScript (ES6+)", "PHP"],
+      "tags": ["backend", "csharp", "c#", "dotnet", ".net", "aspnet", "mvc", "python", "fastapi", "api", "javascript", "php", "languages"]
     },
     {
       "id": "skill-ai",
-      "category": "AI & Workflow Automation",
-      "items": ["AI Agent Integration", "n8n (Distributed Workers)", "OpenClaw", "Workflow Automation", "External API Orchestration"],
-      "tags": ["ai", "agents", "automation", "n8n", "openclaw", "workflow", "llm"]
+      "category": "AI Architecture & Multi-Agent Systems",
+      "items": ["Model Context Protocol (MCP)", "Azure OpenAI (gpt-4.1-mini / gpt-5-mini)", "Gemini API", "Microsoft Agent Framework", "RAG & Hybrid Model Tiering", "pgvector Semantic Search", "Structured Output & Prompt Guardrails"],
+      "tags": ["ai", "agents", "multi-agent", "mcp", "azure openai", "gemini", "rag", "pgvector", "llm", "tiering"]
+    },
+    {
+      "id": "skill-cloud",
+      "category": "Cloud, DevOps & Testing",
+      "items": ["Microsoft Azure (App Service, ACR, Bicep, Managed Identity)", "Cloudflare Workers & KV", "Docker", "TeamCity CI/CD", "xUnit (TDD)", "Git", "Jira"],
+      "tags": ["cloud", "azure", "bicep", "cloudflare", "kv", "devops", "cicd", "ci/cd", "teamcity", "docker", "tdd", "xunit", "testing", "git", "jira"]
+    },
+    {
+      "id": "skill-data",
+      "category": "Databases & Security",
+      "items": ["MS SQL Server (MSSQL)", "PostgreSQL 17 (pgvector & Row-Level Security)", "Redis", "Keyless OAuth2 / Managed Identity"],
+      "tags": ["database", "db", "sql", "mssql", "postgres", "postgresql", "pgvector", "rls", "redis", "security", "data"]
+    },
+    {
+      "id": "skill-frontend",
+      "category": "Frontend & Interfaces",
+      "items": ["ReactJS", "Streamlit", "HTML5", "CSS3 / Tailwind CSS", "Server-Sent Events (SSE)"],
+      "tags": ["frontend", "react", "reactjs", "streamlit", "sse", "ui", "web", "html", "css"]
     }
   ],
   "narrative": [
@@ -245,8 +228,8 @@
       "summary": "Hsiang views AI as a generational inflection point comparable to the dawn of personal computing — a foundational shift that will inevitably reshape every industry and workflow.",
       "details": [
         "She sees today's AI transition as comparable to when computers were first introduced to the world: it is not a temporary trend, and organizations and engineers will inevitably need to build with it.",
-        "Rather than remaining a passive consumer of AI tools, she enrolled in the Master of Artificial Intelligence at the University of Auckland to build rigorous theoretical foundations alongside her 9+ years of production engineering.",
-        "She pairs academic study with hands-on systems engineering — already designing and running a self-hosted distributed workflow automation and AI agent platform (n8n, OpenClaw, Docker, Redis, PostgreSQL)."
+        "Rather than remaining a passive consumer of AI tools, she enrolled in the Master of Artificial Intelligence at the University of Auckland to build rigorous theoretical foundations alongside her 8+ years of production software engineering.",
+        "She pairs formal study with hands-on systems engineering — building cloud-native multi-agent Azure/MCP systems (Zava DIY AI Assistant) and edge-cached LLM applications (this interactive resume app)."
       ],
       "tags": ["why", "study", "studying", "ai", "artificial intelligence", "motivation", "reason", "master", "future", "trend", "computer", "pivot", "learning"]
     },
@@ -256,19 +239,19 @@
       "summary": "Long-term, Hsiang aims to help companies adopt, implement, and evolve practical internal AI technologies directly within their existing operations and software systems.",
       "details": [
         "Her long-term goal is to apply and evolve internal AI technology tailored to each company's real operations — integrating AI smoothly into existing enterprise workflows and backend systems rather than building isolated prototypes.",
-        "Many enterprise AI initiatives stall between proof-of-concept and everyday adoption due to legacy integration, data integrity, security, and reliability challenges — the exact problems she has solved for 9+ years across core banking migrations and large-scale fintech systems.",
+        "Many enterprise AI initiatives stall between proof-of-concept and everyday adoption due to legacy integration, data integrity, security, and reliability challenges — the exact problems she has solved across core banking migrations and large-scale fintech systems.",
         "Combining senior C#/.NET backend engineering, a Master of Management in Accounting, and a Master of Artificial Intelligence positions her to bridge real business goals with practical, reliable internal AI adoption."
       ],
       "tags": ["goal", "goals", "vision", "long term", "long-term", "future", "career", "enterprise", "internal", "ai", "companies", "adoption", "next role", "looking for", "ambition", "direction"]
     },
     {
       "id": "narrative-engineering-style",
-      "title": "Engineering & Leadership Approach",
-      "summary": "Pragmatic, quality-driven senior engineer focused on maintainability, security, TDD, CI/CD, and pragmatic mentorship.",
+      "title": "Engineering & Collaboration Approach",
+      "summary": "Pragmatic, quality-focused senior engineer who emphasizes maintainability, TDD, CI/CD, security boundaries, and supportive technical mentorship.",
       "details": [
-        "Believes software should align tightly with real business and financial outcomes, not just technical elegance.",
-        "Advocates for strong engineering fundamentals — xUnit/TDD, TeamCity CI/CD pipelines, thorough code reviews, and security best practices.",
-        "Enjoys mentoring teammates, unblocking complex legacy/validation issues, and translating ambiguous stakeholder requirements into clear technical deliverables."
+        "Believes software should align tightly with real business and financial outcomes, not just technical complexity.",
+        "Values strong engineering fundamentals — xUnit/TDD, TeamCity CI/CD pipelines, read-only tool sandboxing (MCP), and keyless authentication.",
+        "Enjoys mentoring teammates, untangling complex validation or legacy migration issues, and translating ambiguous stakeholder requirements into reliable deliverables."
       ],
       "tags": ["leadership", "mentoring", "mentor", "style", "culture", "team", "approach", "philosophy", "values", "how she works"]
     }
@@ -279,14 +262,14 @@
       "category": "conversational",
       "title": "Greeting",
       "keywords": ["hi", "hello", "hey", "yo", "greetings", "good morning", "good afternoon", "ruby"],
-      "answer": "Meow! Hello there — I'm **Ruby**, Hsiang's resume assistant. Ask me about her **work history**, **C#/.NET & AI stack**, **education**, or **projects**, or tell me your name so I can remember it!"
+      "answer": "Meow! Hello there — I'm **Ruby**, Hsiang's resume assistant. Ask me about her **work history**, **C#/.NET & Azure AI stack**, **Zava multi-agent project**, or **education**!"
     },
     {
       "id": "faq-status",
       "category": "conversational",
       "title": "Assistant Status",
       "keywords": ["how are you", "how is it going", "how are things", "whats up", "how is your day"],
-      "answer": "Purring along smoothly! I'm always ready to walk you through Hsiang's 9+ years of software engineering experience, fintech background, and AI projects. What would you like to explore?"
+      "answer": "Purring along smoothly! I'm always ready to walk you through Hsiang's enterprise fintech experience and applied AI architecture projects. What would you like to explore?"
     },
     {
       "id": "faq-weather",
@@ -305,16 +288,16 @@
   ],
   "synonyms": [
     ["c#", "csharp", "dotnet", ".net", "asp.net", "aspnet"],
-    ["ai", "artificial intelligence", "ml", "agent", "agents", "llm", "automation", "n8n", "openclaw"],
+    ["ai", "artificial intelligence", "ml", "agent", "agents", "multi-agent", "llm", "mcp", "rag", "zava"],
     ["education", "degree", "degrees", "university", "master", "masters", "uoa", "study", "studying", "academic", "school", "qualification"],
     ["experience", "work", "career", "history", "roles", "job", "jobs", "background", "employment", "companies"],
     ["skills", "skill", "tech", "stack", "technology", "technologies", "languages", "tools", "expertise", "proficient"],
-    ["projects", "project", "built", "build", "portfolio", "initiatives", "side project"],
+    ["projects", "project", "built", "build", "portfolio", "initiatives", "side project", "zava"],
     ["value", "hire", "why", "strengths", "unique", "fit", "benefit", "advantage", "stand out"],
     ["goal", "goals", "vision", "future", "long-term", "career", "enterprise", "direction", "motivation", "reason", "why"],
     ["contact", "email", "linkedin", "github", "reach", "connect", "links", "message"],
-    ["database", "databases", "sql", "mssql", "postgresql", "postgres", "redis"],
-    ["testing", "test", "tdd", "xunit", "quality", "ci/cd", "cicd", "devops", "teamcity", "docker"],
+    ["database", "databases", "sql", "mssql", "postgresql", "postgres", "pgvector", "rls", "redis"],
+    ["testing", "test", "tdd", "xunit", "quality", "ci/cd", "cicd", "devops", "teamcity", "docker", "azure", "bicep", "cloudflare", "kv"],
     ["finance", "fintech", "financial", "banking", "accounting", "payments", "monzo", "lloyds", "vanguard"]
   ]
 }
